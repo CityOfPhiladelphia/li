@@ -1,0 +1,28 @@
+[data-role="content"] h1,
+[data-role="content"] h2,
+[data-role="content"] h3,
+[data-role="content"] h4 {
+    margin-top: 0;
+}
+
+dt {
+	font-weight: bold;
+	background-color: #e6e6e6;
+}
+
+dd {
+	min-height: 15px;
+	margin-left: 20px;
+}
+
+address {
+	font-style: normal;
+}
+
+[data-role="footer"] {
+	padding: 5px;
+}
+
+.ui-collapsible-content {
+	padding: 0px 5px;
+}

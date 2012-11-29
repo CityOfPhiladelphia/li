@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>L&I Property History</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<link rel="stylesheet" href="css/styles.css" />
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="js/jquery.mobile.router.min.js"></script>
+	<script src="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+	<script src="js/phillyapi.js"></script>
+	<script src="js/script.js"></script>
+	<script type="text/javascript">
+	var _gaq = _gaq || [];
+	//_gaq.push(['_setAccount', 'UA-35850648-1']);
+	//_gaq.push(['_trackPageview']);
+	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+	</script>
+</head>
+<body>
+
+	<div data-role="page" id="search">
+		<div data-role="content">
+			<h2>L&I Property History</h2>
+			<form action="#summary">
+				<label for="address" class="ui-hidden-accessible">Address</label>
+				<input type="text" name="address" placeholder="Address">
+				<button type="submit" data-theme="b">Search</button>
+			</form>
+		</div>
+	</div>
+
+	<div data-role="page" id="summary">
+		<div data-role="content"></div>
+		<div data-role="footer" data-theme="b" data-position="fixed" data-id="main-footer">
+			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search</a>
+		</div>
+	</div>
+	
+	<div data-role="page" id="details">
+		<div data-role="content"></div>
+		<div data-role="footer" data-theme="b" data-position="fixed" data-id="main-footer">
+			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search Results</a>
+		</div>
+	</div>
+	
+	<script type="text/template" id="template-summary">
+		<h2><%= address %></h2>
+		<ul data-role="listview">
+		<% if(data.permits !== undefined) { %>
+			<li data-role="list-divider">Permits <span class="ui-li-count"><%= data.permits.length %></span></li>
+			<% _.each(data.permits, function(permit) { %>
+			<li><a href="#details?entity=<%= permit.entity %>&eid=<%= permit.permit_number%>"><%= permit.permit_number %>: <%= permit.permit_type_name %></a></li>
+			<% }); %>
+		<% } %>
+		
+		<% if(data.licenses !== undefined) { %>
+			<li data-role="list-divider">Licenses <span class="ui-li-count"><%= data.licenses.length %></span></li>
+			<% _.each(data.licenses, function(license) { %>
+			<li><a href="#details?entity=<%= license.entity %>&eid=<%= license.license_number%>"><%= license.license_number %>: <%= license.license_type_name %></a></li>
+			<% }); %>
+		<% } %>
+		
+		<% if(data.cases !== undefined) { %>
+			<li data-role="list-divider">Violations <span class="ui-li-count"><%= data.cases.length %></span></li>
+			<% _.each(data.cases, function(_case) { %>
+			<li><a href="#details?entity=<%= _case.entity %>&eid=<%= _case.case_number%>"><%= _case.case_number %>: <%= _case.violations.length %> Violations</a></li>
+			<% }); %>
+		<% } %>
+		
+		<% if(data.appeals !== undefined) { %>
+			<li data-role="list-divider">Appeals <span class="ui-li-count"><%= data.appeals.length %></span></li>
+			<% _.each(data.appeals, function(appeal) { %>
+			<li><a href="#details?entity=<%= appeal.entity %>&eid=<%= appeal.appeal_number%>"><%= appeal.appeal_number %>: <%= appeal.appeal_type_name %></a></li>
+			<% }); %>
+		<% } %>
+		</ul>
+	</script>
+	
+	<script type="text/template" id="template-details-permit">
+		<h2>Permit Details</h2>
+		<dl title="Permit Details">
+			<dt>Permit Number</dt>
+			<dd><%= data.permit_number %></dd>
+			<dt>Application Type</dt>
+			<dd><%= data.application_description %></dd>
+			<dt>Permit Type</dt>
+			<dd><%= data.permit_type_name %></dd>
+			<dt>Status</dt>
+			<dd><%= data.status %></dd>
+			<dt>Date Issued</dt>
+			<dd><%= display_date(data.issued_datetime) %></dd>
+			<dt>Last Updated</dt>
+			<dd><%= display_date(data.updated_datetime) %></dd>
+			<dt>Work Description</dt>
+			<dd><%= data.work_description %></dd>
+			<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
+			<dt>Contact Information</dt>
+			<dd>
+				<address>
+				<%= data.pri_contact_company_name ? data.pri_contact_company_name + "<br>" : ""  %>
+				<%= data.pri_contact_first_name ? data.pri_contact_first_name + " " : ""  %>
+				<%= data.pri_contact_last_name ? data.pri_contact_last_name + "<br>" : ""  %>
+				<%= data.pri_contact_address1 ? data.pri_contact_address1 + "<br>" : "" %>
+				<%= data.pri_contact_address2 ? data.pri_contact_address2 + "<br>" : "" %>
+				<%= data.pri_contact_city ? data.pri_contact_city + ", " : "" %>
+				<%= data.pri_contact_state ? data.pri_contact_state + " " : "" %>
+				<%= data.pri_contact_zip ? data.pri_contact_zip : "" %>
+				</address>
+			</dd>
+			<dt>Contact Type</dt>
+			<dd><%= data.pri_contact_type %></dd>
+			<% } %>
+			<% if(data.contractor_name || data.contractor_address1) { %>
+			<dt>Contractor Information</dt>
+			<dd>
+				<address>
+				<%= data.contractor_name ? data.contractor_name + "<br>" : ""  %>
+				<%= data.contractor_address1 ? data.contractor_address1 + "<br>" : "" %>
+				<%= data.contractor_address2 ? data.contractor_address2 + "<br>" : "" %>
+				<%= data.contractor_city ? data.contractor_city + ", " : "" %>
+				<%= data.contractor_state ? data.contractor_state + " " : "" %>
+				<%= data.contractor_zip ? data.contractor_zip : "" %>
+				</address>
+			</dd>
+			<% } %>
+		</dl>
+	</script>
+	
+	<script type="text/template" id="template-details-license">
+		<h2>License Details</h2>
+		<dl title="License Details">
+			<dt>License Number</dt>
+			<dd><%= data.license_number %></dd>
+			<dt>License Type</dt>
+			<dd><%= data.license_type_name %></dd>
+			<dt>Status</dt>
+			<dd><%= data.status %></dd>
+			<dt>Date Issued</dt>
+			<dd><%= display_date(data.issued_datetime) %></dd>
+			<dt>Expiration Date</dt>
+			<dd>Last Day of <%= data.expires_month %><%= data.expires_year %></dd>
+			<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
+			<dt>Contact Information</dt>
+			<dd>
+				<address>
+				<%= data.pri_contact_company_name ? data.pri_contact_company_name + "<br>" : ""  %>
+				<%= data.pri_contact_first_name ? data.pri_contact_first_name + " " : ""  %>
+				<%= data.pri_contact_last_name ? data.pri_contact_last_name + "<br>" : ""  %>
+				<%= data.pri_contact_address1 ? data.pri_contact_address1 + "<br>" : "" %>
+				<%= data.pri_contact_address2 ? data.pri_contact_address2 + "<br>" : "" %>
+				<%= data.pri_contact_city ? data.pri_contact_city + ", " : "" %>
+				<%= data.pri_contact_state ? data.pri_contact_state + " " : "" %>
+				<%= data.pri_contact_zip ? data.pri_contact_zip : "" %>
+				</address>
+			</dd>
+			<dt>Contact Type</dt>
+			<dd><%= data.pri_contact_type %></dd>
+			<% } %>
+		</dl>
+	</script>
+	
+	<script type="text/template" id="template-details-case">
+		<h2>Case Details</h2>
+		<dl title="Case Details">
+			<dt>Case Number</dt>
+			<dd><%= data.case_number %></dd>
+			<dt>Case Group</dt>
+			<dd><%= data.case_type %></dd>
+			<dt>Case Location</dt>
+			<dd><%= data.case_location %></dd>
+			<dt>Date Added</dt>
+			<dd><%= display_date(data.added_datetime) %></dd>
+			<dt>Date Updated</dt>
+			<dd><%= display_date(data.updated_datetime) %></dd>
+			<dt>Status</dt>
+			<dd><%= data.resolution %></dd>
+			<dt>Resolution Date</dt>
+			<dd><%= display_date(data.resolution_datetime) %></dd>
+			<dt>Priority</dt>
+			<dd><%= data.priority %></dd>			
+		</dl>
+		
+		<% if( ! _.isEmpty(data.violationdetails)) { %>
+			<h2>Violations</h2>
+			<div data-role="collapsible-set">
+			<% _.each(data.violationdetails, function(violation) { %>
+				<div data-role="collapsible">
+					<h3><%= violation.violation_code %></h3>
+					<dl>
+						<dt>Code</dt>
+						<dd><%= violation.violation_code %></dd>
+						<dt>Type</dt>
+						<dd><%= violation.violation_code_description %></dd>
+						<dt>Date</dt>
+						<dd><%= display_date(violation.violation_datetime) %></dd>
+						<dt>Status</dt>
+						<dd><%= violation.violation_status %></dd>
+						<dt>Location</dt>
+						<dd><%= violation.violation_location %></dd>
+					</dl>
+				</div>
+			<% }); %>
+			</div>
+		<% } %>
+	</script>
+	
+	<script type="text/template" id="template-details-appeal">
+		<h2>Appeal Details</h2>
+		<dl title="Appeal Details">
+			<dt>Appeal Number</dt>
+			<dd><%= data.appeal_number %></dd>
+			<dt>Grounds</dt>
+			<dd><%= data.grounds %></dd>
+			<dt>Primary Applicant</dt>
+			<dd><%= data.primary_applicant %></dd>
+			<dt>Capacity</dt>
+			<dd><%= data.capacity %></dd>
+			<dt>Permit Number</dt>
+			<dd><%= data.permit_number %></dd>			
+		</dl>
+		
+		<% if( ! _.isEmpty(data.hearingdecisions)) { %>
+			<h2>Hearing Decisions History</h2>
+			<div data-role="collapsible-set">
+			<% _.each(data.hearingdecisions, function(item) { %>
+				<div data-role="collapsible">
+					<h3><%= display_date(item.decision_datetime) %></h3>
+					<dl>
+						<dt>Date</dt>
+						<dd><%= display_date(item.decision_datetime) %></dd>
+						<dt>Decision</dt>
+						<dd><%= item.decision %></dd>
+						<dt>Proviso</dt>
+						<dd><%= item.proviso %></dd>
+					</dl>
+				</div>
+			<% }); %>
+			</div>
+			<br>
+		<% } %>
+		
+		<% if( ! _.isEmpty(data.courtdetails)) { %>
+			<h2>Court History</h2>
+			<div data-role="collapsible-set">
+			<% _.each(data.courtdetails, function(item) { %>
+				<div data-role="collapsible">
+					<h3><%= display_date(item.court_action_datetime) %></h3>
+					<dl>
+						<dt>Court Case No</dt>
+						<dd><%= item.court_case_number %></dd>
+						<dt>Court Action</dt>
+						<dd><%= item.court_action %></dd>
+						<dt>Action Date</dt>
+						<dd><%= display_date(item.court_action_datetime) %></dd>
+						<dt>Court Result</dt>
+						<dd><%= item.court_result %></dd>
+						<dt>Proviso</dt>
+						<dd><%= item.court_proviso %></dd>
+					</dl>
+				</div>
+			<% }); %>
+			</div>
+		<% } %>
+	</script>
+	
+	<script type="text/template" id="template-details-error">
+		<h2>Error</h2>
+		<%= errorMsg %>
+		<br>
+		<% if(xhr && xhr.status !== undefined && xhr.statusText !== undefined) { %>
+			(<%= xhr.status %> <%= xhr.statusText %>)
+		<% } %>
+	</script>
+	
+	<script type="text/javascript">
+	// Google Analytics
+	$('[data-role=page]').live('pageshow', function (event, ui) {
+		try {
+			_gaq.push(['_setAccount', 'UA-35850648-1']);
+			hash = location.hash;
+			if (hash) _gaq.push(['_trackPageview', hash.substr(1)]);
+			else _gaq.push(['_trackPageview']);
+		} catch(err) {
+		}
+	});
+	// Muscula JS error logging
+	window.Muscula = { settings:{logId:"jRrwCAC-QlhRab", suppressErrors: false, branding: 'none'}};
+	(function () {
+		var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
+		m.src = (window.location.protocol == 'https:' ? 'https:' : 'http:') +
+		    '//musculahq.appspot.com/Muscula.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
+		window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
+		window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
+		return window.Muscula.settings.suppressErrors===undefined;}
+	})();
+	</script>
+</body>
+</html>

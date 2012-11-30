@@ -21,7 +21,7 @@ var controller = {
 	 */
 	,summary: function(eventType, matchObj, ui, page, evt) {
 		// Sanitize the user's input (the address)
-		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, "");
+		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/\.+$/, "");
 		
 		// If we were just looking at this page, it's already rendered so don't do anything
 		if(cache.summary != matchObj[0]) {

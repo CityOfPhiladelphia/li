@@ -1,24 +1,49 @@
+/*
+ * L&I Property History
+ * City of Philadelphia
+ */
 var DEBUG = false;
 var cache = {summary: null, details: null};
 
+/*
+ * The controller methods are called by the router, interact with the model (phillyapi),
+ * and render to the template using underscore.js
+ */
 var controller = {
-    search: function() {
+	/*
+	 * Search - focus on the address box
+	 */
+	search: function() {
 		$("#search form input").eq(0).focus();
 	}
+	/*
+	 * Summary - read the address querystring, get the L&I address key, then get history summary
+	 */
 	,summary: function(eventType, matchObj, ui, page, evt) {
+		// Sanitize the user's input (the address)
 		var input = decodeURIComponent(matchObj[1].replace(/\+/g, "%20")).replace(/^\s+|\s+$/g, "");
+		
+		// If we were just looking at this page, it's already rendered so don't do anything
 		if(cache.summary != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
 			setLoading(true);
+			
+			// Get the L&I Address Key from the address
 			phillyapi.getAddressKey(input, function(addressKey, address) {
 				if(addressKey) {
+					// Get the history summary
 					phillyapi.getSummary(addressKey, function(data) {
 						if(DEBUG) console.log(data);
 						if(_.isEmpty(data)) {
 							controller.error("No history found for this address", page);
 						} else {
+							// Pass data to template for rendering
 							$("[data-role=\"content\"]", page).html(_.template($("#template-summary").html(), {address: address, data: data}));
+							
+							// jQuery Mobile enhance list we just created
 							$("[data-role=\"listview\"]", page).listview();
+							
+							// Tell the cache that this is the page that's currently rendered so we can come back to it easily
 							cache.summary = matchObj[0];
 							setLoading(false);
 						}
@@ -31,13 +56,23 @@ var controller = {
 			});
 		}
 	}
+	/*
+	 * View a permit
+	 */
 	,permit: function(eventType, matchObj, ui, page, evt) {
+		// If we were just looking at this page, it's already rendered so don't do anything
 		if(cache.details != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
 			setLoading(true);
+			
+			// Get the details of this item
 			phillyapi.getPermit(matchObj[1], function(data) {
 				if(DEBUG) console.log(data);
+				
+				// Pass data to template for rendering
 				$("[data-role=\"content\"]", page).html(_.template($("#template-details-permit").html(), {data: data.d}));
+				
+				// Tell the cache that this is the page that's currently rendered so we can come back to it easily
 				cache.details = matchObj[0];
 				setLoading(false);
 			}, function(xhr, status, error) {
@@ -45,6 +80,9 @@ var controller = {
 			});
 		}
 	}
+	/*
+	 * View a license
+	 */
 	,license: function(eventType, matchObj, ui, page, evt) {
 		if(cache.details != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
@@ -59,6 +97,9 @@ var controller = {
 			});
 		}
 	}
+	/*
+	 * View a violation/case
+	 */
 	,_case: function(eventType, matchObj, ui, page, evt) {
 		if(cache.details != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
@@ -74,6 +115,9 @@ var controller = {
 			}, true);
 		}
 	}
+	/*
+	 * View an appeal
+	 */
 	,appeal: function(eventType, matchObj, ui, page, evt) {
 		if(cache.details != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
@@ -89,11 +133,20 @@ var controller = {
 			});
 		}
 	}
+	/*
+	 * Show an error
+	 */
 	,error: function(errorMsg, page, xhr) {
 		$("[data-role=\"content\"]", page).html(_.template($("#template-details-error").html(), {errorMsg: errorMsg, xhr: xhr}));
 		setLoading(false);
 	}
 };
+
+/*
+ * Interpret the various URLs and routes them to the controller
+ * Using azicchetti's awesome jquerymobile-router
+ * https://github.com/azicchetti/jquerymobile-router
+ */
 new $.mobile.Router({
 	"#search": { handler: "search", events: "s" }
 	,"#summary\\?address=(.*)": { handler: "summary", events: "bs" }
@@ -103,8 +156,10 @@ new $.mobile.Router({
 	,"#details\\?entity=(.*)appeals&eid=(\\d*)": { handler: "appeal", events: "bs" }
 }, controller);
 
+/*
+ * DOM hook to ensure user has input an address before pressing search
+ */
 $(document).ready(function() {
-    // Ensure user has input an address before pressing search
 	$("#search form").submit(function(e) {
 		var inputNode = $("input[name=\"address\"]", $(this));
 		if( ! $.trim(inputNode.val())) {
@@ -114,12 +169,17 @@ $(document).ready(function() {
 	});
 });
 
-// Necessary because v1.1.0 of jQuery Mobile doesn't seem to let you show the loading message during pagebeforeshow
+/*
+ * Necessary because v1.1.0 of jQuery Mobile doesn't seem to let you show the loading message during pagebeforeshow
+ */
 function setLoading(on) {
 	if(on) $("body").addClass("ui-loading");
 	else $("body").removeClass("ui-loading");
 }
 
+/*
+ * Stock function to show user friendly date
+ */
 function display_date(input, show_time){
 	var str;
 	if(input) {

@@ -2,7 +2,7 @@ var phillyapi = phillyapi || {};
 phillyapi = {
     options: {
 		phillyapi: {
-			base: "http://services.phila.gov/PhillyApi/Data/"
+			base: "http://services.phila.gov/PhillyApi/data/v0.7/"
 			,summary: "HelperService.svc/GetLocationHistory?$format=json&AddressKey="
 			,permit: "Service.svc/permits('%id%')?$format=json"
 			,license: "Service.svc/licenses('%id%')?$format=json"

@@ -1,7 +1,7 @@
 var phillyapi = phillyapi || {};
 phillyapi = {
     options: {
-		phillyapi: {
+    	phillyapi: {
 			base: "http://services.phila.gov/PhillyApi/data/v0.7/"
 			,summary: "HelperService.svc/GetLocationHistory?$format=json&AddressKey="
 			,permit: "Service.svc/permits('%id%')?$format=json"
@@ -27,16 +27,10 @@ phillyapi = {
 
 	,getAddressKey: function(input, successCallback, errorCallback) {
 		var url = phillyapi.options.ulrs311.base + phillyapi.options.ulrs311.addressKey + encodeURIComponent(input);
-		$.ajax({
+		$.jsonp({
 			url: url
-			,dataType: "jsonp"
-			,contentType: "application/json; charset=utf-8"
-			,async: false
 			,cache: true
-			,crossDomain: true
 			,timeout: phillyapi.options.ulrs311.timeout
-			,type: "GET"
-			,xhrFields: { withCredentials: false }
 			,error: errorCallback
 			,success: function(data) {
 				if("TopicID" in data) {
@@ -117,12 +111,11 @@ phillyapi = {
 	}
 
 	,fetch: function(url, successCallback, errorCallback) {
-		$.ajax({
+		$.jsonp({
 			url: url
-			,dataType: "jsonp"
 			,cache: true
 			,timeout: phillyapi.options.phillyapi.timeout
-			,jsonp: "$callback"
+			,callbackParameter: "$callback"
 			,success: successCallback
 			,error: errorCallback
 		});

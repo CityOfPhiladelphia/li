@@ -10,7 +10,7 @@ var cache = {summary: null, details: null};
  * and render to the template using underscore.js
  */
 var controller = {
-	/*
+    /*
 	 * Search - focus on the address box
 	 */
 	search: function() {
@@ -47,12 +47,14 @@ var controller = {
 							cache.summary = matchObj[0];
 							setLoading(false);
 						}
-					}, function(xhr, status, error) {
-						controller.error("There was an issue fetching the summary data from the server", page, xhr);
+					}, function(xOptions, textStatus) {
+						controller.error("There was an issue fetching the summary data from the server", page);
 					}, true);
 				} else {
 					controller.error("The address entered is not a valid L&I address", page);
 				}
+			}, function(xOptions, textStatus) {
+				controller.error("There was an issue validating the address with the server. The server may be down.", page);
 			});
 		}
 	}
@@ -75,8 +77,8 @@ var controller = {
 				// Tell the cache that this is the page that's currently rendered so we can come back to it easily
 				cache.details = matchObj[0];
 				setLoading(false);
-			}, function(xhr, status, error) {
-				controller.error("There was an issue fetching the permit data from the server", page, xhr);
+			}, function(xOptions, textStatus) {
+				controller.error("There was an issue fetching the permit data from the server", page);
 			});
 		}
 	}
@@ -92,8 +94,8 @@ var controller = {
 				$("[data-role=\"content\"]", page).html(_.template($("#template-details-license").html(), {data: data.d}));
 				cache.details = matchObj[0];
 				setLoading(false);
-			}, function(xhr, status, error) {
-				controller.error("There was an issue fetching the license data from the server", page, xhr);
+			}, function(xOptions, textStatus) {
+				controller.error("There was an issue fetching the license data from the server", page);
 			});
 		}
 	}
@@ -110,8 +112,8 @@ var controller = {
 				$("[data-role=\"collapsible-set\"]", page).collapsibleset();
 				cache.details = matchObj[0];
 				setLoading(false);
-			}, function(xhr, status, error) {
-				controller.error("There was an issue fetching the case data from the server", page, xhr);
+			}, function(xOptions, textStatus) {
+				controller.error("There was an issue fetching the case data from the server", page);
 			}, true);
 		}
 	}
@@ -128,16 +130,16 @@ var controller = {
 				$("[data-role=\"collapsible-set\"]", page).collapsibleset();
 				cache.details = matchObj[0];
 				setLoading(false);
-			}, function(xhr, status, error) {
-				controller.error("There was an issue fetching the appeal data from the server", page, xhr);
+			}, function(xOptions, textStatus) {
+				controller.error("There was an issue fetching the appeal data from the server", page);
 			});
 		}
 	}
 	/*
 	 * Show an error
 	 */
-	,error: function(errorMsg, page, xhr) {
-		$("[data-role=\"content\"]", page).html(_.template($("#template-details-error").html(), {errorMsg: errorMsg, xhr: xhr}));
+	,error: function(errorMsg, page) {
+		$("[data-role=\"content\"]", page).html(_.template($("#template-details-error").html(), {errorMsg: errorMsg}));
 		setLoading(false);
 	}
 };

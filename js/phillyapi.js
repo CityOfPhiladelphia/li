@@ -30,6 +30,7 @@ phillyapi = {
 		$.jsonp({
 			url: url
 			,cache: true
+            ,callbackParameter: "callback"
 			,timeout: phillyapi.options.ulrs311.timeout
 			,error: errorCallback
 			,success: function(data) {

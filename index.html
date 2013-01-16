@@ -16,12 +16,23 @@
 	<script src="js/script.js"></script>
 	<script type="text/javascript">
 	var _gaq = _gaq || [];
-	//_gaq.push(['_setAccount', 'UA-35850648-1']);
-	//_gaq.push(['_trackPageview']);
+	// Google Analytics Initialize
 	(function() {
 	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+    
+    // Muscula JS error logging
+	window.Muscula = { settings:{logId:"jRrwCAC-QlhRab", suppressErrors: false, branding: 'none'}};
+	(function () {
+		var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
+		m.src = (window.location.protocol == 'https:' ? 'https:' : 'http:') +
+		    '//musculahq.appspot.com/Muscula.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
+		window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
+		window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
+		return window.Muscula.settings.suppressErrors===undefined;}
 	})();
 	</script>
 </head>
@@ -289,17 +300,6 @@
 		} catch(err) {
 		}
 	});
-	// Muscula JS error logging
-	window.Muscula = { settings:{logId:"jRrwCAC-QlhRab", suppressErrors: false, branding: 'none'}};
-	(function () {
-		var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
-		m.src = (window.location.protocol == 'https:' ? 'https:' : 'http:') +
-		    '//musculahq.appspot.com/Muscula.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
-		window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
-		window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
-		return window.Muscula.settings.suppressErrors===undefined;}
-	})();
 	</script>
 </body>
 </html>

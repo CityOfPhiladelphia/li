@@ -18,28 +18,43 @@ phillyapi = {
 			,lirbcourtdetails: "Service.svc/lirbcourtdetails?$filter=appeal_id%20eq%20%id%&$format=json"
 			,timeout: 20000
 		}
-		,ulrs311: {
-			base: "http://services.phila.gov/ULRS311/Data/"
-			,addressKey: "LIAddressKey/"
-			,timeout: 20000
+		,ais: {
+			base: "//api.phila.gov/ais/v1/addresses/"
+      ,apiKey: "1e4f98f7cb9f4c2ffeb9eb369cfb26bf"
 		}
 	}
 
-	,getAddressKey: function(input, successCallback, errorCallback) {
-		var url = phillyapi.options.ulrs311.base + phillyapi.options.ulrs311.addressKey + encodeURIComponent(input);
-		$.jsonp({
+	,getAddressKey: function (input, successCallback, errorCallback) {
+		var url = phillyapi.options.ais.base + encodeURIComponent(input);
+		$.ajax({
 			url: url
+      ,data: {gatekeeperKey: phillyapi.options.ais.apiKey}
 			,cache: true
-            ,callbackParameter: "callback"
-			,timeout: phillyapi.options.ulrs311.timeout
 			,error: errorCallback
 			,success: function(data) {
-				if("TopicID" in data) {
-					var addressKey = data.TopicID;
-    				// Clean up the address. Default format is something like " 01234    MARKET ST" - needs to be "1234 MARKET ST" - Anyone have a better regex for it?
-					var address = data.AddressRef ? $.trim(data.AddressRef.replace(/ +(?= )/g,"")).replace(/^0+/, "") : null;
-					successCallback(addressKey, address);
-				}
+        // make sure there are features
+        var features = data.features;
+
+        if (!features || features.length < 1) {
+          errorCallback();
+          return;
+        }
+
+        // make sure there's an address key
+        var feature = features[0],
+            props = feature.properties,
+            address = props.street_address,
+            // ais currently returns `li_address_key` as a pipe-delimited list
+            // of address keys.
+            addressKeys = props.li_address_key.split('|');
+
+        if (addressKeys.length < 1) {
+          errorCallback();
+          return;
+        }
+
+        // render
+				successCallback(addressKeys[0], address);
 			}
 		});
 	}
@@ -50,24 +65,24 @@ phillyapi = {
 			successCallback(sorted ? phillyapi.sortSummary(data) : data);
 		}, errorCallback);
 	}
-	
+
 	,getPermit: function(id, successCallback, errorCallback) {
 		var url = phillyapi.options.phillyapi.base + phillyapi.options.phillyapi.permit.replace("%id%", id);
 		phillyapi.fetch(url, successCallback, errorCallback);
 	}
-	
+
 	,getLicense: function(id, successCallback, errorCallback) {
 		var url = phillyapi.options.phillyapi.base + phillyapi.options.phillyapi.license.replace("%id%", id);
 		phillyapi.fetch(url, successCallback, errorCallback);
 	}
-	
+
 	,getCase: function(id, successCallback, errorCallback, sorted) {
 		var url = phillyapi.options.phillyapi.base + phillyapi.options.phillyapi._case.replace("%id%", id);
 		phillyapi.fetch(url, function(data) {
 			successCallback(sorted ? phillyapi.sortCase(data) : data);
 		}, errorCallback);
 	}
-	
+
 	/*
 		Due to a known issue in the API, we have to do 3 calls here instead of 1. Also, since the Summary gives us the appeal
 		number rather than appeal id, we have to wait for the first call to finish in order to get the appeal id for the second two
@@ -85,13 +100,13 @@ phillyapi = {
 				urlKeys = ["lireviewboardappeal", "lirbhearingdecisions", "lirbcourtdetails"];
 				break;
 		}
-		
+
 		// Appeal Details
 		var url1 = phillyapi.options.phillyapi.base + phillyapi.options.phillyapi[urlKeys[0]].replace("%id%", id);
 		phillyapi.fetch(url1, function(data) {
 			sortedData.d = data.d.results[0];
 			var requestsPending = 0;
-			
+
 			// Hearing Decisions
 			requestsPending++;
 			var url2 = phillyapi.options.phillyapi.base + phillyapi.options.phillyapi[urlKeys[1]].replace("%id%", data.d.results[0].appeal_id);
@@ -121,7 +136,7 @@ phillyapi = {
 			,error: errorCallback
 		});
 	}
-	
+
 	// Sort summary data into categories
 	,sortSummary: function(data) {
 		var sortedData = {};
@@ -184,7 +199,7 @@ phillyapi = {
 		if(sortedData.cases !== undefined) sortedData.cases = phillyapi.objToArray(sortedData.cases);
 		return sortedData;
 	}
-	
+
 	/*
 		This is a work-around for a known issue in the API. Ideally we'd do a call to the case and expand the violationdetails,
 		but since that gives an error, we do a call to the violation details of the case and expand the case.
@@ -200,7 +215,7 @@ phillyapi = {
 		sortedData.d.violationdetails = data.d.results;
 		return sortedData;
 	}
-	
+
 	// Stock function
 	,objToArray: function(obj) {
 		var arr = []

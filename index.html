@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>L&amp;I Property History</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>L&amp;I Property History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
 	<link rel="stylesheet" href="css/styles.css" />
@@ -22,7 +22,7 @@
 	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	})();
-    
+
     // Muscula JS error logging
 	window.Muscula = { settings:{logId:"jRrwCAC-QlhRab", suppressErrors: false, branding: 'none'}};
 	(function () {
@@ -56,14 +56,14 @@
 			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search</a>
 		</div>
 	</div>
-	
+
 	<div data-role="page" id="details">
 		<div data-role="content"></div>
 		<div data-role="footer" data-theme="b" data-position="fixed" data-id="main-footer">
 			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search Results</a>
 		</div>
 	</div>
-	
+
 	<script type="text/template" id="template-summary">
 		<h2><%= address %></h2>
 		<ul data-role="listview">
@@ -73,21 +73,21 @@
 			<li><a href="#details?entity=<%= permit.entity %>&eid=<%= permit.permit_number%>"><%= permit.permit_number %>: <%= permit.permit_type_name %></a></li>
 			<% }); %>
 		<% } %>
-		
+
 		<% if(data.licenses !== undefined) { %>
 			<li data-role="list-divider">Licenses <span class="ui-li-count"><%= data.licenses.length %></span></li>
 			<% _.each(data.licenses, function(license) { %>
 			<li><a href="#details?entity=<%= license.entity %>&eid=<%= license.license_number%>"><%= license.license_number %>: <%= license.license_type_name %></a></li>
 			<% }); %>
 		<% } %>
-		
+
 		<% if(data.cases !== undefined) { %>
 			<li data-role="list-divider">Violations <span class="ui-li-count"><%= data.cases.length %></span></li>
 			<% _.each(data.cases, function(_case) { %>
 			<li><a href="#details?entity=<%= _case.entity %>&eid=<%= _case.case_number%>"><%= _case.case_number %>: <%= _case.violations.length %> Violations</a></li>
 			<% }); %>
 		<% } %>
-		
+
 		<% if(data.appeals !== undefined) { %>
 			<li data-role="list-divider">Appeals <span class="ui-li-count"><%= data.appeals.length %></span></li>
 			<% _.each(data.appeals, function(appeal) { %>
@@ -96,7 +96,7 @@
 		<% } %>
 		</ul>
 	</script>
-	
+
 	<script type="text/template" id="template-details-permit">
 		<h2>Permit Details</h2>
 		<dl title="Permit Details">
@@ -146,7 +146,7 @@
 			<% } %>
 		</dl>
 	</script>
-	
+
 	<script type="text/template" id="template-details-license">
 		<h2>License Details</h2>
 		<dl title="License Details">
@@ -179,7 +179,7 @@
 			<% } %>
 		</dl>
 	</script>
-	
+
 	<script type="text/template" id="template-details-case">
 		<h2>Case Details</h2>
 		<dl title="Case Details">
@@ -198,9 +198,9 @@
 			<dt>Resolution Date</dt>
 			<dd><%= display_date(data.resolution_datetime) %></dd>
 			<dt>Priority</dt>
-			<dd><%= data.priority %></dd>			
+			<dd><%= data.priority %></dd>
 		</dl>
-		
+
 		<% if( ! _.isEmpty(data.violationdetails)) { %>
 			<h2>Violations</h2>
 			<div data-role="collapsible-set">
@@ -224,7 +224,7 @@
 			</div>
 		<% } %>
 	</script>
-	
+
 	<script type="text/template" id="template-details-appeal">
 		<h2>Appeal Details</h2>
 		<dl title="Appeal Details">
@@ -237,9 +237,9 @@
 			<dt>Capacity</dt>
 			<dd><%= data.capacity %></dd>
 			<dt>Permit Number</dt>
-			<dd><%= data.permit_number %></dd>			
+			<dd><%= data.permit_number %></dd>
 		</dl>
-		
+
 		<% if( ! _.isEmpty(data.hearingdecisions)) { %>
 			<h2>Hearing Decisions History</h2>
 			<div data-role="collapsible-set">
@@ -259,7 +259,7 @@
 			</div>
 			<br>
 		<% } %>
-		
+
 		<% if( ! _.isEmpty(data.courtdetails)) { %>
 			<h2>Court History</h2>
 			<div data-role="collapsible-set">
@@ -283,12 +283,12 @@
 			</div>
 		<% } %>
 	</script>
-	
+
 	<script type="text/template" id="template-details-error">
 		<h2>Error</h2>
 		<%= errorMsg %>
 	</script>
-	
+
 	<script type="text/javascript">
 	// Google Analytics
 	$('[data-role=page]').live('pageshow', function (event, ui) {

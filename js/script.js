@@ -21,13 +21,13 @@ var controller = {
 	 */
 	,summary: function(eventType, matchObj, ui, page, evt) {
 		// Sanitize the user's input (the address)
-    	var input = $.trim(decodeURIComponent(matchObj[1].replace(/\+/g, "%20"))).replace(/\.+$/, "");
-		
+		var input = $.trim(decodeURIComponent(matchObj[1].replace(/\+/g, "%20"))).replace(/\.+$/, "");
+
 		// If we were just looking at this page, it's already rendered so don't do anything
 		if(cache.summary != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
 			setLoading(true);
-			
+
 			// Get the L&I Address Key from the address
 			phillyapi.getAddressKey(input, function(addressKey, address) {
 				if(addressKey) {
@@ -39,10 +39,10 @@ var controller = {
 						} else {
 							// Pass data to template for rendering
 							$("[data-role=\"content\"]", page).html(_.template($("#template-summary").html(), {address: address, data: data}));
-							
+
 							// jQuery Mobile enhance list we just created
 							$("[data-role=\"listview\"]", page).listview();
-							
+
 							// Tell the cache that this is the page that's currently rendered so we can come back to it easily
 							cache.summary = matchObj[0];
 							setLoading(false);
@@ -53,8 +53,17 @@ var controller = {
 				} else {
 					controller.error("The address entered is not a valid L&I address", page);
 				}
-			}, function(xOptions, textStatus) {
-				controller.error("There was an issue validating the address with the server. The server may be down.", page);
+			}, function(xOptions, textStatus, errorThrown) {
+				var status = xOptions.status,
+						msg;
+
+				if (status === 404) {
+					msg = "The address you entered could not be found. Please try another search.";
+				} else {
+					msg = "There was an issue validating the address with the server. The server may be down.";
+				}
+
+				controller.error(msg, page);
 			});
 		}
 	}
@@ -66,14 +75,14 @@ var controller = {
 		if(cache.details != matchObj[0]) {
 			$("[data-role=\"content\"]", page).empty();
 			setLoading(true);
-			
+
 			// Get the details of this item
 			phillyapi.getPermit(matchObj[1], function(data) {
 				if(DEBUG) console.log(data);
-				
+
 				// Pass data to template for rendering
 				$("[data-role=\"content\"]", page).html(_.template($("#template-details-permit").html(), {data: data.d}));
-				
+
 				// Tell the cache that this is the page that's currently rendered so we can come back to it easily
 				cache.details = matchObj[0];
 				setLoading(false);

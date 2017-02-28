@@ -14,27 +14,15 @@
     <script src="js/jquery-jsonp.min.js"></script>
 	<script src="js/phillyapi.js"></script>
 	<script src="js/script.js"></script>
-	<script type="text/javascript">
-	var _gaq = _gaq || [];
-	// Google Analytics Initialize
-	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-
-    // Muscula JS error logging
-	window.Muscula = { settings:{logId:"jRrwCAC-QlhRab", suppressErrors: false, branding: 'none'}};
-	(function () {
-		var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
-		m.src = (window.location.protocol == 'https:' ? 'https:' : 'http:') +
-		    '//musculahq.appspot.com/Muscula.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
-		window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
-		window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
-		return window.Muscula.settings.suppressErrors===undefined;}
-	})();
-	</script>
+    <!-- Google Tag Manager [phila.gov] -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MC6CR2');</script>
+    <!-- End Google Tag Manager -->
 </head>
 <body>
 
@@ -289,17 +277,5 @@
 		<%= errorMsg %>
 	</script>
 
-	<script type="text/javascript">
-	// Google Analytics
-	$('[data-role=page]').live('pageshow', function (event, ui) {
-		try {
-			_gaq.push(['_setAccount', 'UA-35850648-1']);
-			hash = location.hash;
-			if (hash) _gaq.push(['_trackPageview', hash.substr(1)]);
-			else _gaq.push(['_trackPageview']);
-		} catch(err) {
-		}
-	});
-	</script>
-</body>
+	</body>
 </html>

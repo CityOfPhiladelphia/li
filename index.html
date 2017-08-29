@@ -4,17 +4,17 @@
     <title>L&amp;I Property History</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
-	<link rel="stylesheet" href="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+	<link rel="stylesheet" href="css/phila-standards.css" />
 	<link rel="stylesheet" href="css/styles.css" />
+	<link rel="stylesheet" href="css/desktop.css" />
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="js/jquery.mobile.router.min.js"></script>
-	<script src="//code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
-    <script src="js/jquery-jsonp.min.js"></script>
-	<script src="js/phillyapi.js"></script>
-	<script src="js/script.js"></script>
-	<script type="text/javascript">
+
+	<!--<script type="text/javascript">
 	var _gaq = _gaq || [];
 	// Google Analytics Initialize
 	(function() {
@@ -34,191 +34,408 @@
 		window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
 		return window.Muscula.settings.suppressErrors===undefined;}
 	})();
-	</script>
+	</script>-->
 </head>
 <body>
+	<!--Header!-->
+	<header class="global-nav pbm pbn-mu mbn-mu">
+		<h1 class="accessible">City of Philadelphia</h1>
+		<div class="row columns bg-ben-franklin-blue expanded utility-nav" data-swiftype-index="false">
+			<div class="row">
+				<div class="columns">
+					<div class="top-bar">
+						<div class="top-bar-right">
+							<ul class="medium-horizontal menu show-for-medium">
+								<li><a href="https://beta.phila.gov/departments/mayor/">Mayor's Office</a></li>
+								<li><a href="https://beta.phila.gov/departments/">City government directory</a></li>
+								<li>
+									<div id="google_translate_element" class="no-js"><span class="show-for-sr">Google Translate</span></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<div data-role="page" id="search">
-		<div data-role="content">
-			<h2>L&I Property History</h2>
-			<p>Enter an address to see permits, licenses, violations and appeals from the Department of Licenses & Inspections.</p>
-			<form action="#summary">
-				<label for="address" class="ui-hidden-accessible">Address</label>
-				<input type="text" name="address" placeholder="Address">
-				<button type="submit" data-theme="b">Search</button>
-			</form>
+		<div class="row expanded background-white primary-menu" data-sticky-container data-swiftype-index="false">
+			<div class="columns sticky phn" data-margin-top="0" data-sticky>
+				<div class="row equal-height">
+					<div class="small-16 medium-6 columns equal valign small-push-4 medium-push-1">
+						<div class="valign-cell">
+							<a href="https://beta.phila.gov" class="logo" tabindex="1" aria-label="City of Philadelphia">
+								<img src="https://cityofphiladelphia.github.io/standards-docs/img/logo/city-of-philadelphia.svg" data-fallback="https://cityofphiladelphia.github.io/standards-docs/img/logo/city-of-philadelphia.png"
+									alt="City of Philadelphia">
+							</a>
+						</div>
+					</div>
+					<a href="#page" aria-hidden="false" class="accessible">Skip to main content</a>
+				</div>
+			</div>
 		</div>
-	</div>
+	</header>
+	<!--Header-->
 
-	<div data-role="page" id="summary">
-		<div data-role="content"></div>
-		<div data-role="footer" data-theme="b" data-position="fixed" data-id="main-footer">
-			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search</a>
+	<div class="pheader">
+		<div class="row">
+			<div class="columns">
+				<header>
+					<h1 class="owner-top">...</h1>
+				</header>
+				<div class="row owner-top">
+					<div class="medium-18 columns">
+						<div class="breadcrubs">
+							<a href="http://www.phila.gov/Pages/default.aspx">phila.gov</a>
+							<a href="#search" class="bsearc">L&amp;I Property History Search</a>
+							<a href="#summary" class="bresults">L&amp;I Property History Results</a>
+							<span class="blast"></span>
+						</div>
+					</div>
+					<div class="medium-6 columns text-right">
+						<a href="#" class="nav-arrows nav-prev"><img src="img/left-arrow.png" width="20" alt="Prev."></a>
+						<a href="#" class="nav-arrows nav-next"><img src="img/right-arrow.png" width="20" alt="Next."></a>
+					</div>
+				</div>
+				<div class="light-blue">
+					<div class="row valign-middle">
+						<div class="medium-12 columns">
+							<h2>OWNER</h2>
+
+							<div class="mailing">
+								<h3>MAILING ADDRESS</h3>
+							</div>
+						</div>
+						<div class="medium-12 columns">
+							<form action="#summary" id="summary_form1" class="search-form-option">
+								<label for="address_text1" class="show-for-sr" data-role="none">Address:</label>
+								<div class="search">
+									<input id="address_text1" type="text" name="address" placeholder="Address..." data-role="none">
+									<input type="submit" value="submit" data-role="none">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	
-	<div data-role="page" id="details">
-		<div data-role="content"></div>
-		<div data-role="footer" data-theme="b" data-position="fixed" data-id="main-footer">
-			<a href="#" data-icon="arrow-l" data-rel="back" data-inline="true">Search Results</a>
+	<main class="row">
+		<div class="columns">
+			<div data-role="page" id="search">
+				<div data-role="content" class="initial-page">
+					<h2>L&amp;I Property History</h2>
+					<p>Enter an address to see permits, licenses, violations and appeals from the Department of Licenses &amp; Inspections.</p>
+					<form action="#summary" id="summary_form2" class="search-form-option" data-role="none">
+						<label for="address_text2" class="show-for-sr" data-role="none">Address:</label>
+						<div class="search" data-role="none">
+							<input id="address_text2" type="text" name="address" placeholder="Address..." data-role="none">
+							<input type="submit" value="submit" data-role="none">
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div data-role="page" id="summary">
+				<div data-role="content"></div>
+			</div>
+
+			<div data-role="page" id="details">
+				<div data-role="content"></div>
+			</div>
 		</div>
-	</div>
+	</main>
 	
-	<script type="text/template" id="template-summary">
-		<h2><%= address %></h2>
-		<ul data-role="listview">
-		<% if(data.permits !== undefined) { %>
-			<li data-role="list-divider">Permits <span class="ui-li-count"><%= data.permits.length %></span></li>
-			<% _.each(data.permits, function(permit) { %>
-			<li><a href="#details?entity=<%= permit.entity %>&eid=<%= permit.permit_number%>"><%= permit.permit_number %>: <%= permit.permit_type_name %></a></li>
-			<% }); %>
-		<% } %>
-		
-		<% if(data.licenses !== undefined) { %>
-			<li data-role="list-divider">Licenses <span class="ui-li-count"><%= data.licenses.length %></span></li>
-			<% _.each(data.licenses, function(license) { %>
-			<li><a href="#details?entity=<%= license.entity %>&eid=<%= license.license_number%>"><%= license.license_number %>: <%= license.license_type_name %></a></li>
-			<% }); %>
-		<% } %>
-		
-		<% if(data.cases !== undefined) { %>
-			<li data-role="list-divider">Violations <span class="ui-li-count"><%= data.cases.length %></span></li>
-			<% _.each(data.cases, function(_case) { %>
-			<li><a href="#details?entity=<%= _case.entity %>&eid=<%= _case.case_number%>"><%= _case.case_number %>: <%= _case.violations.length %> Violations</a></li>
-			<% }); %>
-		<% } %>
-		
-		<% if(data.appeals !== undefined) { %>
-			<li data-role="list-divider">Appeals <span class="ui-li-count"><%= data.appeals.length %></span></li>
-			<% _.each(data.appeals, function(appeal) { %>
-			<li><a href="#details?entity=<%= appeal.entity %>&eid=<%= appeal.appeal_number%>"><%= appeal.appeal_number %>: <%= appeal.appeal_type_name %></a></li>
-			<% }); %>
-		<% } %>
+	<script type="text/template" id="template-header-sumary">
+		<!--<h2><%= address %></h2>-->
+		<div class="cf"></div>
+		<div class="row">
+			<div class="small-24 columns row-titles"><h3>PERMITS</h3></div>
+			<div class="small-24 columns" id="permits-data">
+				<div class="data"></div>
+				<div class="show-more-div">
+					<button class="show-more">Show more..</button>
+				</div>
+			</div>
+			<div class="small-24 columns row-titles"><h3>BUSINESS LICENSES</h3></div>
+			<div class="small-24 columns" id="licenses-data">
+				<div class="data"></div>
+				<div class="show-more-div">
+					<button class="show-more">Show more..</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-24 columns row-titles"><h3>VIOLATIONS</h3></div>
+			<div class="small-24 columns" id="violations-data">
+				<div class="data"></div>
+				<div class="show-more-div">
+					<button class="show-more">Show more..</button>
+				</div>
+			</div>
+			<div class="small-24 columns row-titles"><h3>APPEALS</h3></div>
+			<div class="small-24 columns" id="appeals-data">
+				<div class="data"></div>
+				<div class="show-more-div">
+					<button class="show-more">Show more..</button>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<!-- SUMMARY TEMPLATES -->
+	<script type="text/template" id="template-permits">
+		<ul data-role="listview" data-shadow="false">
+			<% if(!_.isEmpty(permits)) { %>
+				<% _.each(permits, function(permit) { %>
+					<% if(permit.length > 1) { %>
+						<li data-role="collapsible" data-iconpos="left" data-inset="false">
+							<h2><%= permit[0].permitdescription %> - (<%= permit.length %>)</h2>
+							<ul data-role="listview">
+							<% _.each(permit, function(p) { %>
+								<li><a data-eid="<%= p.permitnumber %>" href="#details?entity=permits&eid=<%= p.permitnumber %>&key=<%= key %>&address=<%= address %>"><%= p.permitnumber %></a></li>
+							<% }); %>
+							</ul>
+						</li>
+					<% }else{ %>
+						<li><a data-eid="<%= permit[0].permitnumber %>" href="#details?entity=permits&eid=<%= permit[0].permitnumber %>&key=<%= key %>&address=<%= address %>"><%= permit[0].permitnumber %>: <%= permit[0].permitdescription %></a></li>
+					<% } %>
+				<% }); %>
+			<% }else{ %>
+				<li class="none">None at this time</li>
+			<% } %>
 		</ul>
 	</script>
+
+	<script type="text/template" id="template-licenses">
+		<ul data-role="listview">
+			<% if(!_.isEmpty(licenses)) { %>
+				<% _.each(licenses, function(license) { %>
+					<% if(license.length > 1) { %>
+						<li data-role="collapsible" data-iconpos="left" data-inset="false">
+							<h2><%= license[0].licensetype %> - (<%= license.length %>)</h2>
+							<ul data-role="listview">
+							<% _.each(license, function(p) { %>
+								<li><a data-eid="<%= p.licensenum %>" href="#details?entity=licenses&eid=<%= p.licensenum %>&key=<%= key %>&address=<%= address %>"><%= p.licensenum %></a></li>
+							<% }); %>
+							</ul>
+						</li>
+					<% }else{ %>
+						<li><a data-eid="<%= license[0].licensenum %>" href="#details?entity=licenses&eid=<%= license[0].licensenum %>&key=<%= key %>&address=<%= address %>"><%= license[0].licensenum %>: <%= license[0].licensetype %></a></li>
+					<% } %>
+				<% }); %>
+			<% }else{ %>
+				<li class="none">None at this time</li>
+			<% } %>
+		</ul>
+	</script>
+
+	<script type="text/template" id="template-violations">
+		<ul data-role="listview">
+			<% if(!_.isEmpty(violations)) { %>
+				<% _.each(violations, function(violation) { %>
+				<li><a data-eid="<%= violation[0].casenumber %>" href="#details?entity=violationdetails&eid=<%= violation[0].casenumber %>&key=<%= key %>&address=<%= address %>"><%= violation[0].casenumber %>: <%= violation.length %> Violations - (<%= violation[0].pctype %>)</a></li>
+				<% }); %>
+			<% }else{ %>
+				<li class="none">None at this time</li>
+			<% } %>
+		</ul>
+	</script>
+
+	<script type="text/template" id="template-appeals">
+		<ul data-role="listview">
+			<% if(!_.isEmpty(appeals)) { %>
+				<% _.each(appeals, function(appeal) { %>
+					<li><a data-eid="<%= appeal[0].appeal_key %>" href="#details?entity=appeals&eid=<%= appeal[0].appeal_key%>&key=<%= key %>&address=<%= address %>"><%= appeal[0].appeal_key %>: <%= appeal[0].appeal_type_name %></a></li>
+				<% }); %>
+			<% }else{ %>
+					<li class="none">None at this time</li>
+			<% } %>
+		</ul>
+	</script>
+	<!-- /SUMMARY TEMPLATES -->
+	
 	
 	<script type="text/template" id="template-details-permit">
-		<h2>Permit Details</h2>
-		<dl title="Permit Details">
-			<dt>Permit Number</dt>
-			<dd><%= data.permit_number %></dd>
-			<dt>Application Type</dt>
-			<dd><%= data.application_description %></dd>
-			<dt>Permit Type</dt>
-			<dd><%= data.permit_type_name %></dd>
-			<dt>Status</dt>
-			<dd><%= data.status %></dd>
-			<dt>Date Issued</dt>
-			<dd><%= display_date(data.issued_datetime) %></dd>
-			<dt>Last Updated</dt>
-			<dd><%= display_date(data.updated_datetime) %></dd>
-			<dt>Work Description</dt>
-			<dd><%= data.work_description %></dd>
-			<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
-			<dt>Contact Information</dt>
-			<dd>
-				<address>
-				<%= data.pri_contact_company_name ? data.pri_contact_company_name + "<br>" : ""  %>
-				<%= data.pri_contact_first_name ? data.pri_contact_first_name + " " : ""  %>
-				<%= data.pri_contact_last_name ? data.pri_contact_last_name + "<br>" : ""  %>
-				<%= data.pri_contact_address1 ? data.pri_contact_address1 + "<br>" : "" %>
-				<%= data.pri_contact_address2 ? data.pri_contact_address2 + "<br>" : "" %>
-				<%= data.pri_contact_city ? data.pri_contact_city + ", " : "" %>
-				<%= data.pri_contact_state ? data.pri_contact_state + " " : "" %>
-				<%= data.pri_contact_zip ? data.pri_contact_zip : "" %>
-				</address>
-			</dd>
-			<dt>Contact Type</dt>
-			<dd><%= data.pri_contact_type %></dd>
-			<% } %>
-			<% if(data.contractor_name || data.contractor_address1) { %>
-			<dt>Contractor Information</dt>
-			<dd>
-				<address>
-				<%= data.contractor_name ? data.contractor_name + "<br>" : ""  %>
-				<%= data.contractor_address1 ? data.contractor_address1 + "<br>" : "" %>
-				<%= data.contractor_address2 ? data.contractor_address2 + "<br>" : "" %>
-				<%= data.contractor_city ? data.contractor_city + ", " : "" %>
-				<%= data.contractor_state ? data.contractor_state + " " : "" %>
-				<%= data.contractor_zip ? data.contractor_zip : "" %>
-				</address>
-			</dd>
-			<% } %>
-		</dl>
+		<div class="row-titles">
+			<h2>PERMIT DETAILS</h2>
+		</div>
+
+		<div class="row">
+			<div class="medium-12 columns">
+				<dl title="PERMIT DETAILS">
+					<dt>Permit Number</dt>
+					<dd><%= data.permitnumber %></dd>
+					<dt>Application Type</dt>
+					<dd><%= data.permitdescription %></dd>
+					<dt>Permit Type</dt>
+					<dd>
+						<%= data.permit_type_name %>
+					</dd>
+					<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
+					<!-- ISSUE THIS CONTACT INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
+					<!--<dt>Contact Information</dt>
+					<dd>
+						<address>
+						<%= data.pri_contact_company_name ? data.pri_contact_company_name + "<br>" : ""  %>
+						<%= data.pri_contact_first_name ? data.pri_contact_first_name + " " : ""  %>
+						<%= data.pri_contact_last_name ? data.pri_contact_last_name + "<br>" : ""  %>
+						<%= data.pri_contact_address1 ? data.pri_contact_address1 + "<br>" : "" %>
+						<%= data.pri_contact_address2 ? data.pri_contact_address2 + "<br>" : "" %>
+						<%= data.pri_contact_city ? data.pri_contact_city + ", " : "" %>
+						<%= data.pri_contact_state ? data.pri_contact_state + " " : "" %>
+						<%= data.pri_contact_zip ? data.pri_contact_zip : "" %>
+						</address>
+					</dd>
+					<dt>Contact Type</dt>
+					<dd><%= data.pri_contact_type %></dd>-->
+					<% } %>
+					<dt>Date Issued</dt>
+					<dd><%= data.permitissuedate %></dd>
+				</dl>
+			</div>
+			<div class="medium-12 columns">
+				<dl title="PERMIT DETAILS">
+					<!-- ISSUE THIS LAST UPDATED LOOKS LIKE IT IS FOR EVER REMOVED -->
+					<!--<dt>Last Updated</dt>
+					<dd></dd>-->
+					<dt>Work Description</dt>
+					<dd>
+						<%= data.descriptionofwork %>
+					</dd>
+					<dt>Status</dt>
+					<dd><%= data.status %></dd>
+
+					<% if(data.contractorname || data.contractoraddress1) { %>
+					<dt>Contractor Information</dt>
+					<dd>
+						<address>
+						<%= data.contractorname ? data.contractorname + "<br>" : ""  %>
+						<%= data.contractoraddress1 ? data.contractoraddress1 + "<br>" : "" %>
+						<%= data.contractoraddress2 ? data.contractoraddress2 + "<br>" : "" %>
+						<%= data.contractorcity ? data.contractorcity + ", " : "" %>
+						<%= data.contractorstate ? data.contractorstate + " " : "" %>
+						<%= data.contractorzip ? data.contractorzip : "" %>
+						</address>
+					</dd>
+					<% } %>
+				</dl>
+			</div>
+		</div>
 	</script>
 	
 	<script type="text/template" id="template-details-license">
-		<h2>License Details</h2>
-		<dl title="License Details">
-			<dt>License Number</dt>
-			<dd><%= data.license_number %></dd>
-			<dt>License Type</dt>
-			<dd><%= data.license_type_name %></dd>
-			<dt>Status</dt>
-			<dd><%= data.status %></dd>
-			<dt>Date Issued</dt>
-			<dd><%= display_date(data.issued_datetime) %></dd>
-			<dt>Expiration Date</dt>
-			<dd>Last Day of <%= data.expires_month %><%= data.expires_year %></dd>
-			<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
-			<dt>Contact Information</dt>
-			<dd>
-				<address>
-				<%= data.pri_contact_company_name ? data.pri_contact_company_name + "<br>" : ""  %>
-				<%= data.pri_contact_first_name ? data.pri_contact_first_name + " " : ""  %>
-				<%= data.pri_contact_last_name ? data.pri_contact_last_name + "<br>" : ""  %>
-				<%= data.pri_contact_address1 ? data.pri_contact_address1 + "<br>" : "" %>
-				<%= data.pri_contact_address2 ? data.pri_contact_address2 + "<br>" : "" %>
-				<%= data.pri_contact_city ? data.pri_contact_city + ", " : "" %>
-				<%= data.pri_contact_state ? data.pri_contact_state + " " : "" %>
-				<%= data.pri_contact_zip ? data.pri_contact_zip : "" %>
-				</address>
-			</dd>
-			<dt>Contact Type</dt>
-			<dd><%= data.pri_contact_type %></dd>
-			<% } %>
-		</dl>
+		<div class="row-titles">
+			<h2>LICENSE DETAILS</h2>
+		</div>
+
+		<div class="row">
+			<div class="medium-12 columns">
+				<dl title="LICENSE DETAILS">
+					<dt>License Number</dt>
+					<dd><%= data.licensenum %></dd>
+					<dt>License Type</dt>
+					<dd><%= data.revenuecode %> - <%= data.licensetype %></dd>
+					<dt>Status</dt>
+					<dd><%= data.licensestatus %></dd>
+					<dt>Date Issued</dt>
+					<dd><%= data.initialissuedate %></dd>
+				</dl>
+			</div>
+			<div class="medium-12 columns">
+				<dl title="LICENSE DETAILS">
+					<dt>Inactive Date</dt>
+					<dd><%= data.inactivedate %></dd>
+					<% if(data.legalname || data.legalfirstname || data.legallastname) { %>
+					<dt>Contact Information</dt>
+					<dd>
+						<address>
+						<%= data.legalname ? data.legalname + "<br>" : ""  %>
+						<%= data.legalfirstname ? data.legalfirstname + " " : ""  %>
+						<%= data.legallastname ? data.legallastname + "<br>" : ""  %>
+						<%= data.business_name ? data.business_name + "<br>" : ""  %>
+						<%= data.business_mailing ? data.business_mailing + "<br>" : ""  %>
+						</address>
+						
+						<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
+						<!--<span class="issue">
+							Not Found: pri_contact_address1, pri_contact_address2, pri_contact_city, pri_contact_state, pri_contact_zip
+						</span>-->
+					</dd>
+					<dt>Contact Type</dt>
+					<dd><%= data.legalentitytype %></dd>
+					<% } %>
+				</dl>
+			</div>
+		</div>
 	</script>
 	
 	<script type="text/template" id="template-details-case">
-		<h2>Case Details</h2>
-		<dl title="Case Details">
-			<dt>Case Number</dt>
-			<dd><%= data.case_number %></dd>
-			<dt>Case Group</dt>
-			<dd><%= data.case_type %></dd>
-			<dt>Case Location</dt>
-			<dd><%= data.case_location %></dd>
-			<dt>Date Added</dt>
-			<dd><%= display_date(data.added_datetime) %></dd>
-			<dt>Date Updated</dt>
-			<dd><%= display_date(data.updated_datetime) %></dd>
-			<dt>Status</dt>
-			<dd><%= data.resolution %></dd>
-			<dt>Resolution Date</dt>
-			<dd><%= display_date(data.resolution_datetime) %></dd>
-			<dt>Priority</dt>
-			<dd><%= data.priority %></dd>			
-		</dl>
+		<div class="row-titles">
+			<h2>CASE DETAILS</h2>
+		</div>
+		
+		<div class="row">
+			<div class="medium-12 columns">
+				<dl title="CASE DETAILS">
+					<dt>Case Number</dt>
+					<dd><%= data.casenumber %></dd>
+					<dt>Case Group</dt>
+					<dd><%= data.casegroup %></dd>
+
+					<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
+					<!--<dt>Case Location</dt>
+					<dd class="issue">Removed</dd>-->
+
+					<dt>Date Added</dt>
+					<dd><%= data.caseaddeddate %></dd>
+					<dt>Date Updated</dt>
+					<dd><%= data.mostrecentinsp %></dd>
+				</dl>
+			</div>
+
+			<div class="medium-12 columns">
+				<dl title="CASE DETAILS">
+					<dt>Status</dt>
+					<dd><%= data.casestatus %></dd>
+					<dt>Resolution Date</dt>
+					<dd><%= data.caseresolutiondate %></dd>
+					<dt>Priority</dt>
+					<dd><%= data.prioritydesc %> (<%= data.casepriority %>)</dd>
+				</dl>
+			</div>
+		</div>
 		
 		<% if( ! _.isEmpty(data.violationdetails)) { %>
-			<h2>Violations</h2>
-			<div data-role="collapsible-set">
-			<% _.each(data.violationdetails, function(violation) { %>
+			<div data-role="collapsibleset" class="violations">
+			<% _.each(data.violationdetails, function(violation, index) { %>
 				<div data-role="collapsible">
-					<h3><%= violation.violation_code %></h3>
-					<dl>
-						<dt>Code</dt>
-						<dd><%= violation.violation_code %></dd>
-						<dt>Type</dt>
-						<dd><%= violation.violation_code_description %></dd>
-						<dt>Date</dt>
-						<dd><%= display_date(violation.violation_datetime) %></dd>
-						<dt>Status</dt>
-						<dd><%= violation.violation_status %></dd>
-						<dt>Location</dt>
-						<dd><%= violation.violation_location %></dd>
-					</dl>
+					<% if((index%2)==0) { %>
+					<h3 class="even">Violation Number: <%= violation.violationtype %></h3>
+					<% }else{ %>
+					<h3 class="odd">Violation Number: <%= violation.violationtype %></h3>
+					<% } %>
+					<div class="row">
+						<div class="medium-12 columns">
+							<dl title="VIOLATION DETAILS">
+								<dt>Code</dt>
+								<dd><%= violation.violationtype %></dd>
+								<dt>Type</dt>
+								<dd><%= violation.violationdescription %></dd>
+							</dl>
+						</div>
+						<div class="medium-12 columns">
+							<dl title="VIOLATION DETAILS">
+								<dt>Date</dt>
+								<dd><%= violation.violationdate %></dd>
+								<dt>Status</dt>
+								<dd><%= violation.status %></dd>
+
+								<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
+								<!--<dt>Location</dt>
+								<dd class="issue">Removed</dd>-->
+							</dl>
+						</div>
+					</div>
 				</div>
 			<% }); %>
 			</div>
@@ -226,29 +443,40 @@
 	</script>
 	
 	<script type="text/template" id="template-details-appeal">
-		<h2>Appeal Details</h2>
+		<div class="row-titles">
+			<h2>APPEAL DETAILS</h2>
+		</div>
 		<dl title="Appeal Details">
 			<dt>Appeal Number</dt>
-			<dd><%= data.appeal_number %></dd>
+			<dd><%= data.appealno %></dd>
 			<dt>Grounds</dt>
-			<dd><%= data.grounds %></dd>
+			<dd><%= data.appealgrounds %></dd>
 			<dt>Primary Applicant</dt>
-			<dd><%= data.primary_applicant %></dd>
+			<dd><%= data.primaryapplicant %></dd>
 			<dt>Capacity</dt>
-			<dd><%= data.capacity %></dd>
+			<dd><%= data.aplicantcapacity %></dd>
 			<dt>Permit Number</dt>
-			<dd><%= data.permit_number %></dd>			
+			<dd><%= data.descriptionofproject %></dd>
 		</dl>
 		
-		<% if( ! _.isEmpty(data.hearingdecisions)) { %>
+		<div class="desition-history-div"></div>
+		<div class="court-history-div"></div>
+	</script>
+
+	<script type="text/template" id="template-desition-history">
+		<% if( ! _.isEmpty( desitionHistory ) ) { %>
 			<h2>Hearing Decisions History</h2>
-			<div data-role="collapsible-set">
-			<% _.each(data.hearingdecisions, function(item) { %>
+			<div data-role="collapsibleset" class="appeals">
+			<% _.each(desitionHistory, function(item, index) { %>
 				<div data-role="collapsible">
-					<h3><%= display_date(item.decision_datetime) %></h3>
+					<% if( 0 == ( index%2 ) ) { %>
+					<h3 class="even"><%= item.decisiondate %></h3>
+					<% }else{ %>
+					<h3 class="odd"><%= item.decisiondate %></h3>
+					<% } %>
 					<dl>
 						<dt>Date</dt>
-						<dd><%= display_date(item.decision_datetime) %></dd>
+						<dd><%= item.decisiondate %></dd>
 						<dt>Decision</dt>
 						<dd><%= item.decision %></dd>
 						<dt>Proviso</dt>
@@ -259,24 +487,31 @@
 			</div>
 			<br>
 		<% } %>
-		
-		<% if( ! _.isEmpty(data.courtdetails)) { %>
+	</script>
+
+	<script type="text/template" id="template-court-history">
+		<% if( ! _.isEmpty( courtHistory ) ) { %>
 			<h2>Court History</h2>
-			<div data-role="collapsible-set">
-			<% _.each(data.courtdetails, function(item) { %>
-				<div data-role="collapsible">
-					<h3><%= display_date(item.court_action_datetime) %></h3>
+			<div data-role="collapsibleset">
+			<% _.each(courtHistory, function(item, index) { %>
+				<div data-role="collapsible" class="appeals">
+					<% if( 0 == ( index%2 ) ) { %>
+					<h3 class="even"><%= item.courtactiondate %></h3>
+					<% }else{ %>
+					<h3 class="odd"><%= item.courtactiondate %></h3>
+					<% } %>
+					
 					<dl>
 						<dt>Court Case No</dt>
-						<dd><%= item.court_case_number %></dd>
+						<dd><%= item.courtcasenumber %></dd>
 						<dt>Court Action</dt>
-						<dd><%= item.court_action %></dd>
+						<dd><%= item.courtaction %></dd>
 						<dt>Action Date</dt>
-						<dd><%= display_date(item.court_action_datetime) %></dd>
+						<dd><%= item.courtactiondate %></dd>
 						<dt>Court Result</dt>
-						<dd><%= item.court_result %></dd>
+						<dd><%= item.courtresult %></dd>
 						<dt>Proviso</dt>
-						<dd><%= item.court_proviso %></dd>
+						<dd><%= item.courtproviso %></dd>
 					</dl>
 				</div>
 			<% }); %>
@@ -285,21 +520,200 @@
 	</script>
 	
 	<script type="text/template" id="template-details-error">
-		<h2>Error</h2>
-		<%= errorMsg %>
+		<div class="error">
+			<h2>Error</h2>
+			<p><%= errorMsg %></p>
+		</div>
 	</script>
-	
+
+	<!-- Footer -->
+	<footer data-swiftype-index="false" class="site-footer">
+		<div id="full-footer-start" class="philly311">
+			<section>
+				<div class="row">
+					<div class="columns intro">
+						<h2 class="mbxs">Philly311</h2>
+						<span><a href="http://www.phila.gov/311" class="external" aria-label="Philly 311">311</a> provides direct access to City government information, services, and real-time service updates. Multiple languages are available. Call 311 or <a href="https://twitter.com/philly311" class="external">tweet @philly311</a> for a quick response.</span>
+					</div>
+				</div>
+				<div class="row pvn pvl-mu equal-height">
+					<div class="small-24 medium-8 columns pll prxl pvm ptn-mu pbl-mu sidewalk bdr-right-mu interact-311 clearfix equal">
+						<section>
+							<h3 class="h4 dark-gray">Interact with 311 online</h3>
+							<a href="http://iframe.publicstuff.com/#?client_id=242" class="button icon full-width clearfix">
+								<div class="valign">
+									<i class="fa fa-bullhorn valign-cell"></i>
+									<div class="button-label valign-cell">Report a problem</div>
+								</div>
+							</a>
+							<a href="http://www.phila.gov/311/findananswer/Pages/default.aspx" class="button icon full-width clearfix">
+								<div class="valign">
+									<i class="fa fa-question valign-cell"></i>
+									<div class="button-label valign-cell">Ask a question</div>
+								</div>
+							</a>
+							<a href="https://cityofphiladelphia.github.io/service-request-tracker/" class="button icon full-width clearfix">
+								<div class="valign">
+									<i class="fa fa-check-square-o valign-cell"></i>
+									<div class="button-label valign-cell">Track a request</div>
+								</div>
+							</a>
+						</section>
+					</div>
+					<div class="medium-16 columns trending-requests phl pvm pvn-mu equal">
+						<section>
+							<h3 class="h4 dark-gray">Trending requests</h3>
+
+							<ul class="columns-2-mu">
+								<li>
+									<a href="http://www.phila.gov/OPA/AbatementsExemptions/Pages/Homestead.aspx" class="external">Apply for a Homestead Exemption</a>
+								</li>
+								<li>
+									<a href="http://www.phila.gov/prisons/Facilities/Pages/default.aspx" class="external">Correctional facilities</a>
+								</li>
+								<li>
+									<a href="https://prodpci.etimspayments.com/pbw/include/philadelphia_parking/input.jsp" class="external">Pay a parking violation</a>
+								</li>
+								<li>
+									<a href="https://secure.phila.gov/WRB/WaterBill/Account/GetAccount.aspx" class="external">Pay a water bill</a>
+								</li>
+								<li>
+									<a href="https://ework.phila.gov/revenue/" class="external">Pay a Real Estate Tax bill</a>
+								</li>
+								<li>
+									<a href="http://property.phila.gov/">Search for property information</a>
+								</li>
+								<li>
+									<a href="http://www.philadelphiastreets.com/sanitation/residential/collection-schedules" class="external">Trash and recycling schedule</a>
+								</li>
+								<li>
+									<a href="https://beta.phila.gov/services/become-a-water-customer/property-owners/">Turn water service on or off</a>
+								</li>
+							</ul>
+						</section>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="fat">
+			<div class="row pvs ptl-mu phm equal-height">
+				<section class="medium-8 columns phm pvm pvn-mu equal">
+					<h2 class="mtn mbm">Take action in your community</h2>
+					<nav class="take-action">
+						<ul>
+							<li class="pvxs"><a href="http://serve.phila.gov/" class="external">SERVE Philadelphia</a></li>
+							<li class="pvxs"><a href="https://beta.phila.gov/departments/office-of-sustainability/greenworks/greenworks-on-the-ground/">Greenworks on the Ground initiative</a></li>
+							<li class="pvxs"><a href="http://citizensplanninginstitute.org/" class="external">Citizens Planning Institute</a></li>
+							<li class="pvxs"><a href="http://www.phila.gov/311/aboutus/Pages/NeighborhoodLaison.aspx" class="external">Neighborhood Liaison program</a></li>
+							<li class="pvxs"><a href="http://citizensplanninginstitute.org/citizens-toolkit" class="external">Citizen action toolkit</a></li>
+							<li class="pvxs"><a href="http://www.philadelphiastreets.com/pmbc/" class="external">Clean up your block</a></li>
+							<li class="pvxs"><a href="https://phlevents.org/applications/" class="external">Apply for an event permit</a></li>
+							<li class="pvxs"><a href="http://gsg.phila.gov/map" class="external">City, District, Council, &amp; Ward maps</a></li>
+						</ul>
+					</nav>
+				</section>
+				<section class="medium-8 columns phm pll-mu pvm pvn-mu equal">
+					<h2 class="mtn mbm"> Know your City government</h2>
+					<nav class="take-action">
+						<ul>
+							<li class="pvxs"><a href="https://beta.phila.gov/departments/mayor/" class="">Mayor’s Office</a></li>
+							<li class="pvxs"><a href="http://phlcouncil.com/" class="external">City Council</a></li>
+							<li class="pvxs"><a href="https://beta.phila.gov/departments/" class="">City government directory</a></li>
+							<li class="pvxs"><a href="http://www.phila.gov/openbudget/" class="external">City budget</a></li>
+							<li class="pvxs"><a href="http://www.amlegal.com/codes/client/philadelphia_pa/" class="external">Philadelphia Code &amp; Charter</a></li>
+							<li class="pvxs"><a href="http://www.phila.gov/records/index.html" class="external">City records</a></li>
+							<li class="pvxs"><a href="http://www.phila.gov/ethicsboard/Pages/default.aspx" class="external">Honesty in government</a></li>
+							<li class="pvxs"><a href="http://www.philadelphiavotes.com/" class="external">Voting &amp; elections</a></li>
+							<li class="pvxs"><a href="http://www.phila.gov/data/" class="external">Open data</a></li>
+						</ul>
+					</nav>
+				</section>
+				<section class="medium-8 columns phm pll-mu pvm pvn-mu equal">
+					<h2 class="mtn mbm">Connect with City government</h2>
+					<nav class="city-social">
+						<ul class="inline-list">
+							<li class="pbm">
+								<a href="https://www.facebook.com/PhiladelphiaCityGovernment/" class="prl" data-analytics="social">
+									<i class="fa fa-facebook fa-3x" title="Facebook" aria-hidden="true"></i>
+									<span class="show-for-sr">Facebook</span>
+								</a>
+							</li>
+							<li class="pbm">
+								<a href="https://twitter.com/PhiladelphiaGov" class="prl" data-analytics="social">
+									<i class="fa fa-twitter fa-3x" title="Twitter" aria-hidden="true"></i>
+									<span class="show-for-sr">Twitter</span>
+								</a>
+							</li>
+							<li class="pbm">
+								<a href="https://www.instagram.com/cityofphiladelphia/" class="prl" data-analytics="social">
+									<i class="fa fa-instagram fa-3x" title="Instagram" aria-hidden="true"></i>
+									<span class="show-for-sr">Instagram</span>
+								</a>
+							</li>
+							<li class="pvxs">
+								<a href="http://www.phila.gov/channel64/Pages/default.aspx" class="prl">
+									<span class="fa fa-stack fa-lg"><i class="fa fa-tv fa-stack-2x" title="TV" aria-hidden="true"></i><i class="fa fa-stack-1x"><span class="h4">64</span></i>
+									<span class="show-for-sr">TV 64</span>
+									</span>
+								</a>
+							</li>
+							<li class="pbm">
+								<a href="https://www.youtube.com/user/PhilaGov" class="prl" data-analytics="social">
+									<i class="fa fa-youtube fa-3x" title="Youtube" aria-hidden="true"></i>
+									<span class="show-for-sr">Youtube</span>
+								</a>
+							</li>
+							<li class="pbm">
+								<a href="https://www.flickr.com/photos/phillycityrep" class="prl" data-analytics="social">
+									<i class="fa fa-flickr fa-3x" title="Flickr" aria-hidden="true"></i>
+									<span class="show-for-sr">Flickr</span>
+								</a>
+							</li>
+							<li class="pbm">
+								<a href="https://github.com/CityOfPhiladelphia" class="prl" data-analytics="social">
+									<i class="fa fa-github fa-3x" title="GitHub" aria-hidden="true"></i>
+									<span class="show-for-sr">GitHub</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</section>
+			</div>
+		</div>
+		<div class="bg-black">
+			<div class="row classic">
+				<nav class="columns center">
+					<ul class="inline-list">
+						<li><a href="/terms-of-use">Terms of use</a></li>
+						<li><a href="http://www.phila.gov/privacy/pdfs/FinalCityOpenRecords.pdf">Right to know (pdf)</a></li>
+						<li><a href="/privacypolicy">Privacy Policy</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</footer>
+
+	<!-- /Footer -->
+	<script src="js/plugins.js"></script>
+	<script src="js/phillyapi.js"></script>
+	<script src="js/script.js"></script>
+
 	<script type="text/javascript">
-	// Google Analytics
-	$('[data-role=page]').live('pageshow', function (event, ui) {
-		try {
-			_gaq.push(['_setAccount', 'UA-35850648-1']);
-			hash = location.hash;
-			if (hash) _gaq.push(['_trackPageview', hash.substr(1)]);
-			else _gaq.push(['_trackPageview']);
-		} catch(err) {
-		}
-	});
+		// Google Analytics
+		$('[data-role=page]').on('pageshow', function (event, ui) {
+			try {
+				_gaq.push(['_setAccount', 'UA-35850648-1']);
+				hash = location.hash;
+				if (hash) _gaq.push(['_trackPageview', hash.substr(1)]);
+				else _gaq.push(['_trackPageview']);
+			} catch(err) {
+			}
+		});
+
+		$('main').on('click', '.show-more', function(){
+			$(this).parent().prev().find('>ul>li:hidden').slideDown();
+			$(this).parent().hide();
+		});
 	</script>
 </body>
 </html>

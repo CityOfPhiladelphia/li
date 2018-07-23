@@ -104,6 +104,18 @@ phillyapi = {
         }
 
         var row2 = jQuery.extend(true, {}, data.rows[0]);
+        // Patch; The case status is wrongly displayed. So, I have to push this patch
+        // to parse the resolution code to a human readable cse resolution code.
+        if (_.isEmpty(row2.caseresolutioncode)) {
+          row2.caseresolutiontext = 'OPEN';
+        } else if (row2.caseresolutioncode == 'ABATE' || row2.caseresolutioncode == 'ENCAP') {
+          row2.caseresolutiontext = 'CLEAN AND SEAL';
+        } else if (row2.caseresolutioncode == 'DEMO') {
+          row2.caseresolutiontext = 'DEMOLISHED';
+        } else {
+          row2.caseresolutiontext = 'CLOSED';
+        }
+
         row2.violationdetails = data.rows;
         data.rows = row2;
       }

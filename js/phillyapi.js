@@ -92,7 +92,7 @@ phillyapi = {
 
           data.rows[i].caseresolutiondate = (!_.isEmpty(data.rows[i].caseresolutiondate)) ?
             phillyapi.serverDate(data.rows[i].caseresolutiondate).toDateString() :
-            " - ";
+            "No date";
 
           data.rows[i].caseaddeddate = (!_.isEmpty(data.rows[i].caseaddeddate)) ?
             phillyapi.serverDate(data.rows[i].caseaddeddate).toDateString() :

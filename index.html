@@ -371,7 +371,7 @@
 					<dt>Case Number</dt>
 					<dd><%= data.casenumber %></dd>
 					<dt>Case Group</dt>
-					<dd><%= data.casegroup %></dd>
+					<dd><%= (!_.isEmpty(data.casegroup)) ? data.casegroup : '-' %></dd>
 
 					<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
 					<!--<dt>Case Location</dt>
@@ -390,8 +390,8 @@
 					<!-- <dd><%= data.caseresolutiontext %></dd> -->
 					<!-- Setting case status back. -->
 					<dd><%= data.casestatus %></dd>
-					<dt>Resolution Date</dt>
-					<dd><%= data.caseresolutiondate %></dd>
+					<dt>Resolution Date and Code</dt>
+					<dd><%= data.caseresolutiondate %>, <%= (!_.isEmpty(data.caseresolutioncode)) ? data.caseresolutioncode : 'No Code' %></dd>
 					<dt>Priority</dt>
 					<dd><%= data.prioritydesc %> (<%= data.casepriority %>)</dd>
 				</dl>

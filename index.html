@@ -390,8 +390,10 @@
 					<!-- <dd><%= data.caseresolutiontext %></dd> -->
 					<!-- Setting case status back. -->
 					<dd><%= data.casestatus %></dd>
-					<dt>Resolution Date and Code</dt>
-					<dd><%= data.caseresolutiondate %>, <%= (!_.isEmpty(data.caseresolutioncode)) ? data.caseresolutioncode : 'No code' %></dd>
+					<% if (! _.isEmpty(data.caseresolutiondate) || ! _.isEmpty(data.caseresolutioncode) ) { %>
+						<dt>Resolution Date and Code</dt>
+						<dd><%= (!_.isEmpty(data.caseresolutiondate)) ? data.caseresolutiondate : 'No date' %>, <%= (!_.isEmpty(data.caseresolutioncode)) ? data.caseresolutioncode : 'No code' %></dd>
+					<% } %>
 					<dt>Priority</dt>
 					<dd><%= data.prioritydesc %> (<%= data.casepriority %>)</dd>
 				</dl>
@@ -421,7 +423,7 @@
 								<dt>Date</dt>
 								<dd><%= violation.violationdate %></dd>
 								<dt>Status</dt>
-								<dd><%= violation.status %></dd>
+								<dd><%= (!_.isEmpty(violation.status)) ? violation.status : '-' %></dd>
 
 								<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
 								<!--<dt>Location</dt>

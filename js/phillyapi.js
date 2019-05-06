@@ -27,6 +27,7 @@ phillyapi = {
       var q = a.shift();
       return encodeURIComponent(vsprintf(q, a));
     },
+    // GateKeeper for ais is passing the new gatekeeper test. (api-test.phila.gov)
     searchURL: "https://api.phila.gov/ais/v1/search/%s/?gatekeeperKey=44e6f0081ba0144ea3a69628e2ba6328",
     serviceURL: "https://data.phila.gov/carto/api/v2/sql?q=",
     timeout: 20000

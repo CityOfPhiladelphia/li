@@ -4,4 +4,4 @@ jQuery Mobile App use to pull Permits, Licenses, Violations and Appeals from the
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](LICENSE)

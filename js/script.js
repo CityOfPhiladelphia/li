@@ -1,9 +1,34 @@
-var DEBUG = false;
+var DEBUG = true;
 var FATAL_ERROR = 'There was an issue fetching the summary data for <strong>%s</strong> from the server, please check the address and try again';
 var cache = {
   summary: null,
   details: null
 };
+
+/**
+ * Because sometimes AIS returns different values for one Address
+ * this functions looks for the most similar one and takes that one 
+ * as the source of truth. 
+ */
+
+function returnMostSimilar(response, address) {
+  let features = {};
+  if (response.features.length > 1) {
+    // Now we need to get the most similar address
+    let precentage = 0;
+    for (let i = 0; i < response.features.length; i += 1) {
+      let similarity = phillyapi.similarity(address, response.features[i].properties.opa_address);
+      if (similarity > precentage) {
+        precentage = similarity;
+        features = response.features[i];
+      }
+    }
+  } else {
+    features = response.features[0];
+  }
+
+  return features;
+}
 
 /**
  * Fix Form redirect not working (Ni idea por qué =/)
@@ -78,14 +103,16 @@ var headerInfo = {
         headerInfo.clear();
 
         try {
-          var addresskey = String(response.features[0].properties.li_address_key).replace(/\|/g, ',');
-          var street_address = String(response.features[0].properties.street_address);
+          // var addresskey = String(response.features[0].properties.li_address_key).replace(/\|/g, ',');
+          // var street_address = String(response.features[0].properties.street_address);
 
-          headerInfo.populate(the_address, response.features[0].properties);
+          let features = returnMostSimilar(response, the_address);
+          headerInfo.populate(the_address, features.properties);
 
         } catch (err) {
           headerInfo.clear();
           $('.light-blue h2, .mailing').append($('<small>').text('No address data found.'));
+          if (DEBUG) console.error('Err:', err);
         }
       }, function (xOptions, textStatus) {
         headerInfo.clear();
@@ -186,6 +213,8 @@ var controller = {
     // Sanitize the user's input (the address)
     var raw_input = matchObj[1];
     var input = $.trim(decodeURIComponent(matchObj[1].replace(/\+/g, "%20"))).replace(/\.+$/, "");
+
+    if (DEBUG) console.log('raw_input: ', raw_input);
     if (DEBUG) console.log('address: ', input);
 
     // If we were just looking at this page, it's already rendered so don't do anything
@@ -193,11 +222,14 @@ var controller = {
       phillyapi.getAddressInfo(input, function (response) {
         if (DEBUG) console.log("AIS: ", response);
         try {
-          var addresskey = String(response.features[0].properties.li_address_key).replace(/\|/g, ',');
-          var street_address = String(response.features[0].properties.street_address);
-          var eclipse_location_id = String(response.features[0].properties.eclipse_location_id);
 
-          headerInfo.populate(input, response.features[0].properties);
+          let features = returnMostSimilar(response, input);
+
+          var addresskey = String(features.properties.li_address_key).replace(/\|/g, ',');
+          var street_address = String(features.properties.street_address);
+          var eclipse_location_id = String(features.properties.eclipse_location_id);
+
+          headerInfo.populate(input, features.properties);
 
           headerInfo.clearNav();
           $("[data-role=\"content\"]", page).empty();

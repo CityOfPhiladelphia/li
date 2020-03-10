@@ -26,3 +26,8 @@ address {
 .ui-collapsible-content {
 	padding: 0px 5px;
 }
+
+.callout i {
+	float: left;
+	padding-right: 10px;
+}

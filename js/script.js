@@ -103,7 +103,7 @@ var headerInfo = {
         headerInfo.clear();
 
         try {
-          // var addresskey = String(response.features[0].properties.li_address_key).replace(/\|/g, ',');
+          // var addressobjectid = String(response.features[0].properties.li_address_key).replace(/\|/g, ',');
           // var street_address = String(response.features[0].properties.street_address);
 
           let features = returnMostSimilar(response, the_address);
@@ -225,9 +225,9 @@ var controller = {
 
           let features = returnMostSimilar(response, input);
 
-          var addresskey = String(features.properties.li_address_key).replace(/\|/g, ',');
+          var addressobjectid = String(features.properties.li_address_key);
           var street_address = String(features.properties.street_address);
-          var eclipse_location_id = String(features.properties.eclipse_location_id);
+          var eclipse_location_id = String(features.properties.eclipse_location_id)
 
           headerInfo.populate(input, features.properties);
 
@@ -240,12 +240,12 @@ var controller = {
           }));
 
           //Load Permits
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.permits, addresskey.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.permits, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
 
             if (DEBUG) console.log('Permits', data);
             $("#permits-data .data", page).html(_.template($("#template-permits").html(), {
               'permits': data.rows,
-              'key': addresskey,
+              'key': addressobjectid,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -278,7 +278,7 @@ var controller = {
             }));
             checkDone.check('licenses');
           } else {
-            phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.licenses, eclipse_location_id), function (data) {
+            phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.licenses, String(eclipse_location_id).replace(/\|/g, '\',\'')), function (data) {
               if (DEBUG) console.log('Licenses', data);
               $("#licenses-data .data", page).html(_.template($("#template-licenses").html(), {
                 'licenses': data.rows,
@@ -303,11 +303,11 @@ var controller = {
           }
 
           //Load Violations
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.violations, addresskey.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.violations, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
             if (DEBUG) console.log('Violations', data);
             $("#violations-data .data", page).html(_.template($("#template-violations").html(), {
               'violations': data.rows,
-              'key': addresskey,
+              'key': addressobjectid,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -328,11 +328,11 @@ var controller = {
 
 
           //Load Appeals
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.appeals, addresskey.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.appeals, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
             if (DEBUG) console.log('Appeals', data);
             $("#appeals-data .data", page).html(_.template($("#template-appeals").html(), {
               'appeals': data.rows,
-              'key': addresskey,
+              'key': addressobjectid,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -479,7 +479,7 @@ var controller = {
       phillyapi.getAppeal(matchObj[1], String(matchObj[2]).replace(/\,/g, '\',\''), function (data) {
         if (DEBUG) console.log('Current Appeals:', data);
 
-        $('.pheader header h1').html("APPEAL NUMBER: " + data.rows.appealno);
+        $('.pheader header h1').html("APPEAL NUMBER: " + data.rows.appealnumber);
         $("[data-role=\"content\"]", page).html(_.template($("#template-details-appeal").html(), {
           data: data.rows
         }));
@@ -488,7 +488,7 @@ var controller = {
           /**
            * Get Desition History
            */
-          phillyapi.getDesitionHistory(data.rows.appeal_key, function (desitionHistory) {
+          phillyapi.getDesitionHistory(data.rows.internaljobid, function (desitionHistory) {
             if (DEBUG) console.log("Desition History:", desitionHistory);
 
             $(".desition-history-div").html(_.template($("#template-desition-history").html(), {
@@ -502,7 +502,7 @@ var controller = {
           /**
            * Get Court History
            */
-          phillyapi.getCourtHistory(data.rows.appeal_key, function (courtHistory) {
+          phillyapi.getCourtHistory(data.rows.internaljobid, function (courtHistory) {
             if (DEBUG) console.log("Court History:", courtHistory);
 
             $(".court-history-div").html(_.template($("#template-court-history").html(), {

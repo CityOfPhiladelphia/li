@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 var FATAL_ERROR = 'There was an issue fetching the summary data for <strong>%s</strong> from the server, please check the address and try again';
 var cache = {
   summary: null,
@@ -223,11 +223,13 @@ var controller = {
         if (DEBUG) console.log("AIS: ", response);
         try {
 
-          let features = returnMostSimilar(response, input);
+          var features = returnMostSimilar(response, input);
 
           var addressobjectid = String(features.properties.li_address_key);
           var street_address = String(features.properties.street_address);
-          var eclipse_location_id = String(features.properties.eclipse_location_id)
+          var eclipse_location_id = String(features.properties.eclipse_location_id);
+
+          var finalAddressObjectID = addressobjectid + ',' + eclipse_location_id.replace(/\|/g, ',');
 
           headerInfo.populate(input, features.properties);
 
@@ -240,12 +242,12 @@ var controller = {
           }));
 
           //Load Permits
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.permits, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.permits, finalAddressObjectID.replace(/\,/g, '\',\'')), function (data) {
 
             if (DEBUG) console.log('Permits', data);
             $("#permits-data .data", page).html(_.template($("#template-permits").html(), {
               'permits': data.rows,
-              'key': addressobjectid,
+              'key': finalAddressObjectID,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -269,20 +271,20 @@ var controller = {
 
 
           //Load Licenses
-          if(_.isEmpty(eclipse_location_id)) {
+          if(_.isEmpty(finalAddressObjectID)) {
             // It is empty, just skip the Query
             $("#licenses-data .data", page).html(_.template($("#template-licenses").html(), {
               'licenses': [],
-              'key': eclipse_location_id,
+              'key': finalAddressObjectID,
               'address': raw_input
             }));
             checkDone.check('licenses');
           } else {
-            phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.licenses, String(eclipse_location_id).replace(/\|/g, '\',\'')), function (data) {
+            phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.licenses, finalAddressObjectID.replace(/\,/g, '\',\'')), function (data) {
               if (DEBUG) console.log('Licenses', data);
               $("#licenses-data .data", page).html(_.template($("#template-licenses").html(), {
                 'licenses': data.rows,
-                'key': eclipse_location_id,
+                'key': finalAddressObjectID,
                 'address': raw_input
               }));
               if (!_.isEmpty(data.rows)) {
@@ -303,11 +305,11 @@ var controller = {
           }
 
           //Load Violations
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.violations, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.violations, finalAddressObjectID.replace(/\,/g, '\',\'')), function (data) {
             if (DEBUG) console.log('Violations', data);
             $("#violations-data .data", page).html(_.template($("#template-violations").html(), {
               'violations': data.rows,
-              'key': addressobjectid,
+              'key': finalAddressObjectID,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -328,11 +330,11 @@ var controller = {
 
 
           //Load Appeals
-          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.appeals, addressobjectid.replace(/\,/g, '\',\'')), function (data) {
+          phillyapi.getSummary(phillyapi.options.prepare(phillyapi.options.query.appeals, finalAddressObjectID.replace(/\,/g, '\',\'')), function (data) {
             if (DEBUG) console.log('Appeals', data);
             $("#appeals-data .data", page).html(_.template($("#template-appeals").html(), {
               'appeals': data.rows,
-              'key': addressobjectid,
+              'key': finalAddressObjectID,
               'address': raw_input
             }));
             if (!_.isEmpty(data.rows)) {
@@ -437,9 +439,9 @@ var controller = {
    * View a violation/case
    */
   _case: function (eventType, matchObj, ui, page, evt) {
+    if (DEBUG) console.log("matchObj[0]", matchObj[0]);
     if (cache.details != matchObj[0]) {
       headerInfo.setupDetail(matchObj[1], matchObj[3]);
-
       $("[data-role=\"content\"]", page).empty();
       setLoading(true);
       phillyapi.getCase(matchObj[1], String(matchObj[2]).replace(/\,/g, '\',\''), function (data) {
@@ -550,19 +552,19 @@ new $.mobile.Router({
     handler: "summary",
     events: "bs"
   },
-  "#details\\?entity=permits&eid=(\\d*)&key=(.*)&address=(.*)": {
+  "#details\\?entity=permits&eid=(.*)&key=(.*)&address=(.*)": {
     handler: "permit",
     events: "bs"
   },
-  "#details\\?entity=licenses&eid=(\\d*)&key=(.*)&address=(.*)": {
+  "#details\\?entity=licenses&eid=(.*)&key=(.*)&address=(.*)": {
     handler: "license",
     events: "bs"
   },
-  "#details\\?entity=violationdetails&eid=(\\d*)&key=(.*)&address=(.*)": {
+  "#details\\?entity=violationdetails&eid=(.*)&key=(.*)&address=(.*)": {
     handler: "_case",
     events: "bs"
   },
-  "#details\\?entity=appeals&eid=(\\d*)&key=(.*)&address=(.*)": {
+  "#details\\?entity=appeals&eid=(.*)&key=(.*)&address=(.*)": {
     handler: "appeal",
     events: "bs"
   }

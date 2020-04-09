@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 var FATAL_ERROR = 'There was an issue fetching the summary data for <strong>%s</strong> from the server, please check the address and try again';
 var cache = {
   summary: null,

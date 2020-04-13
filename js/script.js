@@ -446,8 +446,8 @@ var controller = {
       setLoading(true);
       phillyapi.getCase(matchObj[1], String(matchObj[2]).replace(/\,/g, '\',\''), function (data) {
         if (DEBUG) console.log('Current Violations:', data);
-
-        $('.pheader header h1').html("CASE NUMBER: " + data.rows.casenumber + "<br>" + data.rows.aptype);
+        console.log(data.rows);
+        $('.pheader header h1').html("CASE NUMBER: " + data.rows.casenumber + "<br>" + data.rows.caseprioritydesc);
 
         $("[data-role=\"content\"]", page).html(_.template($("#template-details-case").html(), {
           data: data.rows

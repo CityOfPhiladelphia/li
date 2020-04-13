@@ -111,10 +111,6 @@
 	</div>
 	
 	<main class="row">
-		<div class="callout">
-			<i class="fa fa-exclamation-triangle fa-5x"></i>
-					<p>The City of Philadelphia is conducting a software update and data conversion process that will interrupt property history data updates beginning March 13, 2020. The City regrets the inconvenience and anticipates – but cannot guarantee – that updates will resume in 20 or fewer days. Visit L&I's <a href="https://www.phila.gov/2020-03-09-updates-to-li-data-on-city-websites-to-be-temporarily-interrupted/">blog post</a> for more information.</p>
-				</div>
 		<div class="columns">
 			<div data-role="page" id="search">
 				<div data-role="content" class="initial-page">
@@ -228,7 +224,7 @@
 		<ul data-role="listview">
 			<% if(!_.isEmpty(violations)) { %>
 				<% _.each(violations, function(violation) { %>
-				<li><a data-eid="<%= violation[0].casenumber %>" href="#details?entity=violationdetails&eid=<%= violation[0].casenumber %>&key=<%= key %>&address=<%= address %>"><%= violation[0].casenumber %>: <%= violation.length %> Violations - (<%= violation[0].pctype %>)</a></li>
+				<li><a data-eid="<%= violation[0].casenumber %>" href="#details?entity=violationdetails&eid=<%= violation[0].casenumber %>&key=<%= key %>&address=<%= address %>"><%= violation[0].casenumber %>: <%= violation.length %> Violations</a></li>
 				<% }); %>
 			<% }else{ %>
 				<li class="none">None at this time</li>
@@ -240,7 +236,7 @@
 		<ul data-role="listview">
 			<% if(!_.isEmpty(appeals)) { %>
 				<% _.each(appeals, function(appeal) { %>
-					<li><a data-eid="<%= appeal[0].appeal_key %>" href="#details?entity=appeals&eid=<%= appeal[0].appeal_key%>&key=<%= key %>&address=<%= address %>"><%= appeal[0].appeal_key %>: <%= appeal[0].appeal_type_name %></a></li>
+					<li><a data-eid="<%= appeal[0].internaljobid %>" href="#details?entity=appeals&eid=<%= appeal[0].internaljobid%>&key=<%= key %>&address=<%= address %>"><%= appeal[0].internaljobid %>: <%= appeal[0].appeal_type_name %></a></li>
 				<% }); %>
 			<% }else{ %>
 					<li class="none">None at this time</li>
@@ -264,7 +260,7 @@
 					<dd><%= data.permitdescription %></dd>
 					<dt>Permit Type</dt>
 					<dd>
-						<%= data.permit_type_name %>
+						<%= data.typeofwork %>
 					</dd>
 					<% if(data.pri_contact_company_name || data.pri_contact_first_name || data.pri_contact_last_name || data.pri_contact_address1) { %>
 					<!-- ISSUE THIS CONTACT INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
@@ -295,7 +291,7 @@
 					<dd></dd>-->
 					<dt>Work Description</dt>
 					<dd>
-						<%= data.descriptionofwork %>
+						<%= data.approvedscopeofwork %>
 					</dd>
 					<dt>Status</dt>
 					<dd><%= data.status %></dd>
@@ -339,7 +335,7 @@
 			<div class="medium-12 columns">
 				<dl title="LICENSE DETAILS">
 					<dt>Inactive Date</dt>
-					<dd><%= data.inactivedate %></dd>
+					<dd><%= (!_.isEmpty(data.inactivedate)) ? data.inactivedate : '-' %></dd>
 					<% if(data.legalname || data.legalfirstname || data.legallastname) { %>
 					<dt>Contact Information</dt>
 					<dd>
@@ -348,7 +344,7 @@
 						<%= data.legalfirstname ? data.legalfirstname + " " : ""  %>
 						<%= data.legallastname ? data.legallastname + "<br>" : ""  %>
 						<%= data.business_name ? data.business_name + "<br>" : ""  %>
-						<%= data.business_mailing ? data.business_mailing + "<br>" : ""  %>
+						<%= data.business_mailing_address ? data.business_mailing_address + "<br>" : ""  %>
 						</address>
 						
 						<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
@@ -357,7 +353,7 @@
 						</span>-->
 					</dd>
 					<dt>Contact Type</dt>
-					<dd><%= data.legalentitytype %></dd>
+					<dd><%= (!_.isEmpty(data.legalentitytype)) ? data.legalentitytype : '-' %></dd>
 					<% } %>
 				</dl>
 			</div>
@@ -375,16 +371,16 @@
 					<dt>Case Number</dt>
 					<dd><%= data.casenumber %></dd>
 					<dt>Case Group</dt>
-					<dd><%= (!_.isEmpty(data.casegroup)) ? data.casegroup : '-' %></dd>
+					<dd><%= (!_.isEmpty(data.caseresponsibility)) ? data.caseresponsibility : '-' %></dd>
 
 					<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
 					<!--<dt>Case Location</dt>
 					<dd class="issue">Removed</dd>-->
 
 					<dt>Date Added</dt>
-					<dd><%= data.caseaddeddate %></dd>
+					<dd><%= data.casecreateddate %></dd>
 					<dt>Date Updated</dt>
-					<dd><%= data.mostrecentinsp %></dd>
+					<dd><%= data.mostrecentinvestigation %></dd>
 				</dl>
 			</div>
 
@@ -394,12 +390,12 @@
 					<!-- <dd><%= data.caseresolutiontext %></dd> -->
 					<!-- Setting case status back. -->
 					<dd><%= data.casestatus %></dd>
-					<% if (! _.isEmpty(data.caseresolutiondate) || ! _.isEmpty(data.caseresolutioncode) ) { %>
-						<dt>Resolution Date and Code</dt>
-						<dd><%= (!_.isEmpty(data.caseresolutiondate)) ? data.caseresolutiondate : 'No date' %>, <%= (!_.isEmpty(data.caseresolutioncode)) ? data.caseresolutioncode : 'No code' %></dd>
+					<% if (! _.isEmpty(data.casecompleteddate)) { %>
+						<dt>Resolution Date</dt>
+						<dd><%= (!_.isEmpty(data.casecompleteddate)) ? data.casecompleteddate : 'No date' %></dd>
 					<% } %>
 					<dt>Priority</dt>
-					<dd><%= data.prioritydesc %> (<%= data.casepriority %>)</dd>
+					<dd><%= data.caseprioritydesc %></dd>
 				</dl>
 			</div>
 		</div>
@@ -409,17 +405,17 @@
 			<% _.each(data.violationdetails, function(violation, index) { %>
 				<div data-role="collapsible">
 					<% if((index%2)==0) { %>
-					<h3 class="even">Violation Number: <%= violation.violationtype %></h3>
+					<h3 class="even">Violation Number: <%= violation.violationcode %></h3>
 					<% }else{ %>
-					<h3 class="odd">Violation Number: <%= violation.violationtype %></h3>
+					<h3 class="odd">Violation Number: <%= violation.violationcode %></h3>
 					<% } %>
 					<div class="row">
 						<div class="medium-12 columns">
 							<dl title="VIOLATION DETAILS">
 								<dt>Code</dt>
-								<dd><%= violation.violationtype %></dd>
+								<dd><%= violation.violationcode %></dd>
 								<dt>Type</dt>
-								<dd><%= violation.violationdescription %></dd>
+								<dd><%= violation.violationcodetitle %></dd>
 							</dl>
 						</div>
 						<div class="medium-12 columns">
@@ -427,7 +423,7 @@
 								<dt>Date</dt>
 								<dd><%= violation.violationdate %></dd>
 								<dt>Status</dt>
-								<dd><%= (!_.isEmpty(violation.status)) ? violation.status : '-' %></dd>
+								<dd><%= (!_.isEmpty(violation.violationstatus)) ? violation.violationstatus : '-' %></dd>
 
 								<!-- ISSUE THIS INFORMATION LOOKS LIKE IT IS FOR EVER REMOVED -->
 								<!--<dt>Location</dt>
@@ -447,15 +443,15 @@
 		</div>
 		<dl title="Appeal Details">
 			<dt>Appeal Number</dt>
-			<dd><%= data.appealno %></dd>
+			<dd><%= data.appealnumber %></dd>
 			<dt>Grounds</dt>
 			<dd><%= data.appealgrounds %></dd>
 			<dt>Primary Applicant</dt>
-			<dd><%= data.primaryapplicant %></dd>
+			<dd><%= data.primaryappellant %></dd>
 			<dt>Capacity</dt>
-			<dd><%= data.aplicantcapacity %></dd>
+			<dd><%= data.appellanttype %></dd>
 			<dt>Permit Number</dt>
-			<dd><%= data.descriptionofproject %></dd>
+			<dd><%= data.relatedpermit %></dd>
 		</dl>
 		
 		<div class="desition-history-div"></div>
@@ -479,7 +475,7 @@
 						<dt>Decision</dt>
 						<dd><%= item.decision %></dd>
 						<dt>Proviso</dt>
-						<dd><%= item.proviso %></dd>
+						<dd><%= item.meetingremarks %></dd>
 					</dl>
 				</div>
 			<% }); %>
